@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
+part 'widget/output_text.dart';
+part 'widget/parse_text.dart';
+
 class LexicalParser extends StatefulWidget {
   const LexicalParser({super.key, required this.children});
   final List<dynamic> children;
@@ -28,13 +31,17 @@ class _LexicalParserState extends State<LexicalParser> {
           case 'paragraph':
             return parseParagraph(child);
           case 'text':
-            return parseText(child);
+            return _ParseText(child: child);
           case 'image':
             return parseImage(child);
           case 'equation':
             return parseEquation(child);
           case 'table':
             return parseTable(child);
+          case 'list':
+            return parseList(child);
+          case 'listitem':
+            return parseListItem(child);
           default:
             return const SizedBox.shrink();
         }
@@ -72,13 +79,6 @@ class _LexicalParserState extends State<LexicalParser> {
     }
   }
 
-  Widget parseText(Map<String, dynamic> child) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: _OutputText(child: child),
-    );
-  }
-
   Widget parseEquation(Map<String, dynamic> child) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -114,56 +114,51 @@ class _LexicalParserState extends State<LexicalParser> {
       ),
     );
   }
-}
 
-class _OutputText extends StatelessWidget {
-  const _OutputText({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Map<String, dynamic> child;
-
-  @override
-  Widget build(BuildContext context) {
-    //Need Fix
-    TextAlign textAlign = textAlignFromFormat(child['format']);
-    return Text(
-      child['text'],
-      style: textStyle(child['format']),
-      textAlign: textAlign,
+  Widget parseList(Map<String, dynamic> child) {
+    List<Widget> childrenWidgets = parseJsonChildrenWidget(
+      child['children'] ?? [],
     );
+
+    if (child['listType'] == 'number') {
+      int count = 1;
+      return Padding(
+        padding: const EdgeInsets.only(left: 20.0),
+        child: Column(
+          children: childrenWidgets.map((widget) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('${count++}.'),
+                Expanded(child: widget),
+              ],
+            );
+          }).toList(),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20.0),
+        child: Column(
+          children: childrenWidgets.map((widget) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('• '),
+                Expanded(child: widget),
+              ],
+            );
+          }).toList(),
+        ),
+      );
+    }
   }
 
-  TextStyle textStyle(int? format) {
-    FontWeight fontWeight = FontWeight.normal;
-    FontStyle fontStyle = FontStyle.normal;
-    TextDecoration decoration = TextDecoration.none;
-    bool isStrikethrough = false;
-
-    if (format == null) {
-      return const TextStyle();
-    }
-    if (format & 1 != 0) fontWeight = FontWeight.bold;
-    if (format & 2 != 0) fontStyle = FontStyle.italic;
-    if (format & 4 != 0) decoration = TextDecoration.underline;
-    if (format & 8 != 0) isStrikethrough = true;
-
-    return TextStyle(
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-      decoration: isStrikethrough ? TextDecoration.lineThrough : decoration,
+  Widget parseListItem(Map<String, dynamic> child) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: parseJsonChildrenWidget(child['children'] ?? []),
     );
-  }
-
-  TextAlign textAlignFromFormat(int? format) {
-    if (format == null) {
-      return TextAlign.left;
-    }
-    if (format & 16 != 0) return TextAlign.left;
-    if (format & 32 != 0) return TextAlign.center;
-    if (format & 64 != 0) return TextAlign.right;
-    return TextAlign.left; // значение по умолчанию
   }
 }
 
