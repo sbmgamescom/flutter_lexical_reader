@@ -6,6 +6,8 @@ part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
 part 'widget/parse_paragraph.dart';
 part 'widget/parse_table.dart';
+part 'widget/parse_list.dart';
+part 'widget/parse_list_item.dart';
 
 class LexicalParser extends StatefulWidget {
   const LexicalParser({
@@ -63,7 +65,6 @@ List<Widget> parseJsonChildrenWidget(
               child: child,
               textStyle: textStyle ?? const TextStyle(fontSize: 14));
         case 'quote':
-          // return parseParagraph(child);
           return _ParseParagraph(child: child);
         case 'image':
           return _ParseImage(child: child);
@@ -72,58 +73,12 @@ List<Widget> parseJsonChildrenWidget(
         case 'table':
           return _ParseTable(child: child);
         case 'list':
-          return parseList(child);
+          return _ParseList(child: child);
         case 'listitem':
-          return parseListItem(child);
+          return _ParseListItem(child: child);
         default:
           return const SizedBox.shrink();
       }
     },
   ).toList();
-}
-
-Widget parseList(Map<String, dynamic> child) {
-  List<Widget> childrenWidgets = parseJsonChildrenWidget(
-    child['children'] ?? [],
-  );
-
-  if (child['listType'] == 'number') {
-    int count = 1;
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
-      child: Column(
-        children: childrenWidgets.map((widget) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('${count++}.'),
-              Expanded(child: widget),
-            ],
-          );
-        }).toList(),
-      ),
-    );
-  } else {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
-      child: Column(
-        children: childrenWidgets.map((widget) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('•'),
-              Expanded(child: widget),
-            ],
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-Widget parseListItem(Map<String, dynamic> child) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: parseJsonChildrenWidget(child['children'] ?? []),
-  );
 }
