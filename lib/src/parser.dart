@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
-part 'widget/output_text.dart';
 part 'widget/parse_text.dart';
 part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
@@ -57,14 +56,21 @@ class _LexicalParserState extends State<LexicalParser> {
       child['children'] ?? [],
     );
     if (childrenWidgets.length > 1) {
-      return Wrap(
-        alignment: _wrapFromString(child['format']),
-        children: childrenWidgets,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: _wrapFromString(child['format']),
+          children: childrenWidgets,
+        ),
       );
     } else {
-      return Column(
-        crossAxisAlignment: _crossFromString(child['format']),
-        children: childrenWidgets,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: _crossFromString(child['format']),
+          children: childrenWidgets,
+        ),
       );
     }
   }

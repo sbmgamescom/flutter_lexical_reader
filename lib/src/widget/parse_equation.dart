@@ -7,9 +7,6 @@ class _ParseEquation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Math.tex(child['equation']),
-    );
+    return Math.tex(child['equation']);
   }
 }
