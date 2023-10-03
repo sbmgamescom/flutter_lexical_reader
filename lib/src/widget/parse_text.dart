@@ -1,13 +1,14 @@
 part of '../parser.dart';
 
 class _ParseText extends StatelessWidget {
-  const _ParseText({required this.child});
+  const _ParseText({required this.child, required this.textStyle});
 
   final Map<String, dynamic> child;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
-    TextStyle baseStyle = textStyle(child['format']);
+    TextStyle baseStyle = _textStyle(child['format'], textStyle);
 
     TextSpan mainSpan;
     if (isSuperscript(child['format'])) {
@@ -47,7 +48,7 @@ class _ParseText extends StatelessWidget {
     return format != null && (format & 32) != 0;
   }
 
-  TextStyle textStyle(int? format) {
+  TextStyle _textStyle(int? format, TextStyle textStyle) {
     FontWeight fontWeight = FontWeight.normal;
     FontStyle fontStyle = FontStyle.normal;
     TextDecoration decoration = TextDecoration.none;
@@ -61,8 +62,7 @@ class _ParseText extends StatelessWidget {
     if (format & 4 != 0) isStrikethrough = true;
     if (format & 8 != 0) decoration = TextDecoration.underline;
 
-    return TextStyle(
-      fontSize: 14,
+    return textStyle.copyWith(
       color: Colors.black,
       fontWeight: fontWeight,
       fontStyle: fontStyle,

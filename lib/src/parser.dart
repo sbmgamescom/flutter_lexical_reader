@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
@@ -5,23 +7,44 @@ part 'widget/parse_text.dart';
 part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
 part 'widget/parse_paragraph.dart';
-part 'widget/parse_quote.dart';
-part 'base_parser.dart';
 
 class LexicalParser extends StatefulWidget {
   const LexicalParser({
     super.key,
     required this.children,
+    this.textStyle,
+    this.lazyLoad,
   });
   final List<dynamic> children;
+  final TextStyle? textStyle;
+  final bool? lazyLoad;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
 }
 
 class _LexicalParserState extends State<LexicalParser> {
+  TextStyle? _textStyle;
+  TextStyle get textStyle {
+    return _textStyle ??= widget.textStyle ??
+        Theme.of(context).textTheme.titleMedium ??
+        const TextStyle();
+  }
+
+  final Map<String, List<Widget>> _cache = {};
+
   @override
   Widget build(BuildContext context) {
+    if (widget.lazyLoad == true) {
+      return ListView.builder(
+        itemCount: widget.children.length,
+        itemBuilder: (context, index) {
+          return parseJsonChildrenWidget(
+            [widget.children[index]],
+          )[0];
+        },
+      );
+    }
     return ListView(
       children: parseJsonChildrenWidget(
         widget.children,
@@ -30,7 +53,11 @@ class _LexicalParserState extends State<LexicalParser> {
   }
 
   List<Widget> parseJsonChildrenWidget(List<dynamic> children) {
-    return children.map<Widget>(
+    final cacheKey = jsonEncode(children);
+    if (_cache.containsKey(cacheKey)) {
+      return _cache[cacheKey]!;
+    }
+    final result = children.map<Widget>(
       (child) {
         switch (child['type']) {
           case 'heading':
@@ -38,8 +65,9 @@ class _LexicalParserState extends State<LexicalParser> {
           case 'paragraph':
             return parseParagraph(child);
           case 'text':
-            return _ParseText(child: child);
-
+            return _ParseText(child: child, textStyle: textStyle);
+          case 'quote':
+            return parseParagraph(child);
           case 'image':
             return _ParseImage(child: child);
           case 'equation':
@@ -55,6 +83,8 @@ class _LexicalParserState extends State<LexicalParser> {
         }
       },
     ).toList();
+    _cache[cacheKey] = result;
+    return result;
   }
 
   Widget parseParagraph(Map<String, dynamic> child) {
