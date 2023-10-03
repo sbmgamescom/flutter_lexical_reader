@@ -5,9 +5,14 @@ part 'widget/parse_text.dart';
 part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
 part 'widget/parse_paragraph.dart';
+part 'widget/parse_quote.dart';
+part 'base_parser.dart';
 
 class LexicalParser extends StatefulWidget {
-  const LexicalParser({super.key, required this.children});
+  const LexicalParser({
+    super.key,
+    required this.children,
+  });
   final List<dynamic> children;
 
   @override
@@ -34,6 +39,7 @@ class _LexicalParserState extends State<LexicalParser> {
             return parseParagraph(child);
           case 'text':
             return _ParseText(child: child);
+
           case 'image':
             return _ParseImage(child: child);
           case 'equation':

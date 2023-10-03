@@ -7,6 +7,9 @@ class _ParseEquation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Math.tex(child['equation']);
+    return Math.tex(
+      child['equation'],
+      options: MathOptions(style: MathStyle.display),
+    );
   }
 }

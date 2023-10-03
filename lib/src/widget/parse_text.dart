@@ -7,20 +7,6 @@ class _ParseText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _OutputText(child: child);
-  }
-}
-
-class _OutputText extends StatelessWidget {
-  const _OutputText({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Map<String, dynamic> child;
-
-  @override
-  Widget build(BuildContext context) {
     TextStyle baseStyle = textStyle(child['format']);
 
     TextSpan mainSpan;
