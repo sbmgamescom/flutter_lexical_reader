@@ -3,6 +3,9 @@ import 'package:flutter_math_fork/flutter_math.dart';
 
 part 'widget/output_text.dart';
 part 'widget/parse_text.dart';
+part 'widget/parse_equation.dart';
+part 'widget/parse_image.dart';
+part 'widget/parse_paragraph.dart';
 
 class LexicalParser extends StatefulWidget {
   const LexicalParser({super.key, required this.children});
@@ -33,9 +36,9 @@ class _LexicalParserState extends State<LexicalParser> {
           case 'text':
             return _ParseText(child: child);
           case 'image':
-            return parseImage(child);
+            return _ParseImage(child: child);
           case 'equation':
-            return parseEquation(child);
+            return _ParseEquation(child: child);
           case 'table':
             return parseTable(child);
           case 'list':
@@ -47,19 +50,6 @@ class _LexicalParserState extends State<LexicalParser> {
         }
       },
     ).toList();
-  }
-
-  Widget parseImage(Map<String, dynamic> child) {
-    final double width = double.parse(child['maxWidth'].toString());
-    // double height = double.parse(child['height'].toString());
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Image.network(
-        child['src'][0],
-        width: width / 2,
-        fit: BoxFit.fitWidth,
-      ),
-    );
   }
 
   Widget parseParagraph(Map<String, dynamic> child) {
@@ -77,13 +67,6 @@ class _LexicalParserState extends State<LexicalParser> {
         children: childrenWidgets,
       );
     }
-  }
-
-  Widget parseEquation(Map<String, dynamic> child) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Math.tex(child['equation']),
-    );
   }
 
   Widget parseTable(Map<String, dynamic> child) {
@@ -144,7 +127,7 @@ class _LexicalParserState extends State<LexicalParser> {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('• '),
+                Text('•'),
                 Expanded(child: widget),
               ],
             );
@@ -159,31 +142,5 @@ class _LexicalParserState extends State<LexicalParser> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: parseJsonChildrenWidget(child['children'] ?? []),
     );
-  }
-}
-
-WrapAlignment _wrapFromString(String? format) {
-  switch (format) {
-    case 'center':
-      return WrapAlignment.center;
-    case 'left':
-      return WrapAlignment.start;
-    case 'right':
-      return WrapAlignment.end;
-    default:
-      return WrapAlignment.start;
-  }
-}
-
-CrossAxisAlignment _crossFromString(String? format) {
-  switch (format) {
-    case 'center':
-      return CrossAxisAlignment.center;
-    case 'left':
-      return CrossAxisAlignment.start;
-    case 'right':
-      return CrossAxisAlignment.end;
-    default:
-      return CrossAxisAlignment.start;
   }
 }
