@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
@@ -31,8 +29,6 @@ class _LexicalParserState extends State<LexicalParser> {
         const TextStyle();
   }
 
-  final Map<String, List<Widget>> _cache = {};
-
   @override
   Widget build(BuildContext context) {
     if (widget.lazyLoad == true) {
@@ -53,11 +49,7 @@ class _LexicalParserState extends State<LexicalParser> {
   }
 
   List<Widget> parseJsonChildrenWidget(List<dynamic> children) {
-    final cacheKey = jsonEncode(children);
-    if (_cache.containsKey(cacheKey)) {
-      return _cache[cacheKey]!;
-    }
-    final result = children.map<Widget>(
+    return children.map<Widget>(
       (child) {
         switch (child['type']) {
           case 'heading':
@@ -83,8 +75,6 @@ class _LexicalParserState extends State<LexicalParser> {
         }
       },
     ).toList();
-    _cache[cacheKey] = result;
-    return result;
   }
 
   Widget parseParagraph(Map<String, dynamic> child) {
