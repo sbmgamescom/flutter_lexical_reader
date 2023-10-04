@@ -1,21 +1,23 @@
 part of '../parser.dart';
 
 class _ParseText extends StatelessWidget {
-  const _ParseText({required this.child, required this.textStyle});
+  const _ParseText({required this.child});
 
   final Map<String, dynamic> child;
-  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
-    TextStyle baseStyle = _textStyle(child['format'], textStyle);
+    final textStyle = PropsInheritedWidget.of(context)!.textStyle;
+    final baseStyle = _textStyle(child['format'], textStyle);
+    final fontSize = baseStyle.fontSize ?? 12;
 
     TextSpan mainSpan;
+
     if (isSuperscript(child['format'])) {
       mainSpan = TextSpan(
         text: child['text'],
         style: baseStyle.copyWith(
-          fontSize: baseStyle.fontSize! * 0.7,
+          fontSize: fontSize * 0.7,
           height: 0.8,
         ),
       );
@@ -23,7 +25,7 @@ class _ParseText extends StatelessWidget {
       mainSpan = TextSpan(
         text: child['text'],
         style: baseStyle.copyWith(
-          fontSize: baseStyle.fontSize! * 0.7,
+          fontSize: fontSize * 0.7,
           height: 3.2,
         ),
       );

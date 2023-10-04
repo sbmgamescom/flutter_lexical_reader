@@ -28,7 +28,7 @@ class _ParseTable extends StatelessWidget {
     ).toList();
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(2.0),
       child: Table(
         children: tableRows,
         border: TableBorder.all(color: Colors.black54),

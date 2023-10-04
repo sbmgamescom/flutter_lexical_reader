@@ -8,6 +8,7 @@ part 'widget/parse_paragraph.dart';
 part 'widget/parse_table.dart';
 part 'widget/parse_list.dart';
 part 'widget/parse_list_item.dart';
+part 'widget/parse_children.dart';
 
 class LexicalParser extends StatefulWidget {
   const LexicalParser({
@@ -15,10 +16,12 @@ class LexicalParser extends StatefulWidget {
     required this.children,
     this.textStyle,
     this.lazyLoad,
+    this.tablePadding,
   });
   final List<dynamic> children;
   final TextStyle? textStyle;
   final bool? lazyLoad;
+  final EdgeInsets? tablePadding;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -29,56 +32,52 @@ class _LexicalParserState extends State<LexicalParser> {
   TextStyle get textStyle {
     return _textStyle ??= widget.textStyle ??
         Theme.of(context).textTheme.titleMedium ??
-        const TextStyle();
+        const TextStyle(fontSize: 10);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.lazyLoad == true) {
-      return ListView.builder(
-        itemCount: widget.children.length,
-        itemBuilder: (context, index) {
-          return parseJsonChildrenWidget([widget.children[index]],
-              textStyle: textStyle)[0];
-        },
-      );
-    }
-    return ListView(
-      children: parseJsonChildrenWidget(widget.children, textStyle: textStyle),
+    return PropsInheritedWidget(
+      textStyle: textStyle,
+      child: widget.lazyLoad == true
+          ? ListView.builder(
+              itemCount: widget.children.length,
+              itemBuilder: (context, index) {
+                return parseJsonChildrenWidget([widget.children[index]],
+                    textStyle: textStyle)[0];
+              },
+            )
+          : ListView(
+              children: parseJsonChildrenWidget(widget.children,
+                  textStyle: textStyle),
+            ),
     );
   }
 }
 
-List<Widget> parseJsonChildrenWidget(
-  List<dynamic> children, {
-  TextStyle? textStyle,
-}) {
-  return children.map<Widget>(
-    (child) {
-      switch (child['type']) {
-        case 'heading':
-          return _ParseParagraph(child: child);
-        case 'paragraph':
-          return _ParseParagraph(child: child);
-        case 'text':
-          return _ParseText(
-              child: child,
-              textStyle: textStyle ?? const TextStyle(fontSize: 14));
-        case 'quote':
-          return _ParseParagraph(child: child);
-        case 'image':
-          return _ParseImage(child: child);
-        case 'equation':
-          return _ParseEquation(child: child);
-        case 'table':
-          return _ParseTable(child: child);
-        case 'list':
-          return _ParseList(child: child);
-        case 'listitem':
-          return _ParseListItem(child: child);
-        default:
-          return const SizedBox.shrink();
-      }
-    },
-  ).toList();
+class PropsInheritedWidget extends InheritedWidget {
+  final TextStyle textStyle;
+  final EdgeInsets? tablePadding;
+
+  const PropsInheritedWidget({
+    Key? key,
+    required this.textStyle,
+    required Widget child,
+    this.tablePadding,
+  }) : super(key: key, child: child);
+
+  static PropsInheritedWidget? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<PropsInheritedWidget>();
+  }
+
+  static PropsInheritedWidget? of(BuildContext context) {
+    final PropsInheritedWidget? result = maybeOf(context);
+    assert(result != null, 'No PropsInheritedWidget found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(covariant PropsInheritedWidget oldWidget) {
+    return textStyle != oldWidget.textStyle;
+  }
 }
