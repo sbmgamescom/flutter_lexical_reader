@@ -22,9 +22,9 @@ List<Widget> parseJsonChildrenWidget(
         case 'table':
           return _ParseTable(child: child);
         case 'list':
-          return _ParseList(child: child);
+          return _ParseNumberedList(child: child);
         case 'listitem':
-          return _ParseListItem(child: child);
+          return _ParseNumberedListItem(child: child);
         default:
           return const SizedBox.shrink();
       }

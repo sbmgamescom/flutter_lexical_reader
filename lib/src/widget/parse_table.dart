@@ -6,31 +6,36 @@ class _ParseTable extends StatelessWidget {
   });
   final Map<String, dynamic> child;
 
+  List<TableRow> _buildTableRows(List<dynamic> childrenData) {
+    return childrenData
+        .where((row) => row['type'] == 'tablerow')
+        .map<TableRow>(_buildTableRow)
+        .toList();
+  }
+
+  TableRow _buildTableRow(dynamic row) {
+    List<Widget> rowCells = (row['children'] as List? ?? [])
+        .where((cell) => cell['type'] == 'tablecell')
+        .map<Widget>(_buildTableCell)
+        .toList();
+
+    return TableRow(children: rowCells);
+  }
+
+  Widget _buildTableCell(dynamic cell) {
+    return Column(
+      children: parseJsonChildrenWidget(cell['children'] ?? []),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<TableRow> tableRows = (child['children'] ?? []).map<TableRow>(
-      (row) {
-        if (row['type'] == 'tablerow') {
-          List<Widget> rowCells = (row['children'] ?? []).map<Widget>(
-            (cell) {
-              if (cell['type'] == 'tablecell') {
-                return Column(
-                  children: parseJsonChildrenWidget(cell['children'] ?? []),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ).toList();
-          return TableRow(children: rowCells);
-        }
-        return const TableRow(children: []);
-      },
-    ).toList();
-
+    final padding = PropsInheritedWidget.of(context)?.tablePadding ??
+        const EdgeInsets.all(2.0);
     return Padding(
-      padding: const EdgeInsets.all(2.0),
+      padding: padding,
       child: Table(
-        children: tableRows,
+        children: _buildTableRows(child['children'] as List? ?? []),
         border: TableBorder.all(color: Colors.black54),
       ),
     );

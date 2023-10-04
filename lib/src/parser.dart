@@ -6,8 +6,8 @@ part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
 part 'widget/parse_paragraph.dart';
 part 'widget/parse_table.dart';
-part 'widget/parse_list.dart';
-part 'widget/parse_list_item.dart';
+part 'widget/parse_numbered_list.dart';
+part 'widget/parse_numbered_list_item.dart';
 part 'widget/parse_children.dart';
 
 class LexicalParser extends StatefulWidget {
@@ -17,11 +17,15 @@ class LexicalParser extends StatefulWidget {
     this.textStyle,
     this.lazyLoad,
     this.tablePadding,
+    this.paragraphPadding,
+    this.numberedPadding,
   });
   final List<dynamic> children;
   final TextStyle? textStyle;
   final bool? lazyLoad;
   final EdgeInsets? tablePadding;
+  final EdgeInsets? paragraphPadding;
+  final EdgeInsets? numberedPadding;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -39,6 +43,9 @@ class _LexicalParserState extends State<LexicalParser> {
   Widget build(BuildContext context) {
     return PropsInheritedWidget(
       textStyle: textStyle,
+      tablePadding: widget.tablePadding,
+      paragraphPadding: widget.paragraphPadding,
+      numberedPadding: widget.numberedPadding,
       child: widget.lazyLoad == true
           ? ListView.builder(
               itemCount: widget.children.length,
@@ -58,12 +65,16 @@ class _LexicalParserState extends State<LexicalParser> {
 class PropsInheritedWidget extends InheritedWidget {
   final TextStyle textStyle;
   final EdgeInsets? tablePadding;
+  final EdgeInsets? paragraphPadding;
+  final EdgeInsets? numberedPadding;
 
   const PropsInheritedWidget({
     Key? key,
     required this.textStyle,
     required Widget child,
     this.tablePadding,
+    this.paragraphPadding,
+    this.numberedPadding,
   }) : super(key: key, child: child);
 
   static PropsInheritedWidget? maybeOf(BuildContext context) {

@@ -1,13 +1,15 @@
 part of '../parser.dart';
 
-class _ParseList extends StatelessWidget {
-  const _ParseList({
+class _ParseNumberedList extends StatelessWidget {
+  const _ParseNumberedList({
     required this.child,
   });
   final Map<String, dynamic> child;
 
   @override
   Widget build(BuildContext context) {
+    final numberedPadding = PropsInheritedWidget.of(context)?.numberedPadding ??
+        const EdgeInsets.only(left: 20.0, bottom: 20);
     List<Widget> childrenWidgets = parseJsonChildrenWidget(
       child['children'] ?? [],
     );
@@ -15,13 +17,13 @@ class _ParseList extends StatelessWidget {
     if (child['listType'] == 'number') {
       int count = 1;
       return Padding(
-        padding: const EdgeInsets.only(left: 20.0),
+        padding: numberedPadding,
         child: Column(
           children: childrenWidgets.map((widget) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('${count++}.'),
+                Text('${count++}. '),
                 Expanded(child: widget),
               ],
             );
@@ -30,13 +32,13 @@ class _ParseList extends StatelessWidget {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.only(left: 20.0),
+        padding: numberedPadding,
         child: Column(
           children: childrenWidgets.map((widget) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text('•'),
+                const Text('• '),
                 Expanded(child: widget),
               ],
             );

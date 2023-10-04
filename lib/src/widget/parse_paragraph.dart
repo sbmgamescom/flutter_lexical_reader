@@ -8,52 +8,47 @@ class _ParseParagraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> childrenWidgets = parseJsonChildrenWidget(
+    final paragraphPadding =
+        PropsInheritedWidget.of(context)?.paragraphPadding ??
+            const EdgeInsets.symmetric(vertical: 8.0);
+    final List<Widget> childrenWidgets = parseJsonChildrenWidget(
       child['children'] ?? [],
     );
+    final Widget content;
     if (childrenWidgets.length > 1) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: _wrapFromString(child['format']),
-          children: childrenWidgets,
-        ),
+      content = Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: _alignmentFromString<WrapAlignment>(child['format']),
+        children: childrenWidgets,
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          crossAxisAlignment: _crossFromString(child['format']),
-          children: childrenWidgets,
-        ),
+      content = Column(
+        crossAxisAlignment:
+            _alignmentFromString<CrossAxisAlignment>(child['format']),
+        children: childrenWidgets,
       );
     }
+
+    return Padding(
+      padding: paragraphPadding,
+      child: content,
+    );
   }
 }
 
-WrapAlignment _wrapFromString(String? format) {
+T _alignmentFromString<T>(String? format) {
   switch (format) {
     case 'center':
-      return WrapAlignment.center;
+      if (T == WrapAlignment) return WrapAlignment.center as T;
+      return CrossAxisAlignment.center as T;
     case 'left':
-      return WrapAlignment.start;
+      if (T == WrapAlignment) return WrapAlignment.start as T;
+      return CrossAxisAlignment.start as T;
     case 'right':
-      return WrapAlignment.end;
+      if (T == WrapAlignment) return WrapAlignment.end as T;
+      return CrossAxisAlignment.end as T;
     default:
-      return WrapAlignment.start;
-  }
-}
-
-CrossAxisAlignment _crossFromString(String? format) {
-  switch (format) {
-    case 'center':
-      return CrossAxisAlignment.center;
-    case 'left':
-      return CrossAxisAlignment.start;
-    case 'right':
-      return CrossAxisAlignment.end;
-    default:
-      return CrossAxisAlignment.start;
+      if (T == WrapAlignment) return WrapAlignment.start as T;
+      return CrossAxisAlignment.start as T;
   }
 }

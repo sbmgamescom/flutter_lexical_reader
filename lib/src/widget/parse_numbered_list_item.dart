@@ -1,7 +1,7 @@
 part of '../parser.dart';
 
-class _ParseListItem extends StatelessWidget {
-  const _ParseListItem({
+class _ParseNumberedListItem extends StatelessWidget {
+  const _ParseNumberedListItem({
     required this.child,
   });
   final Map<String, dynamic> child;
