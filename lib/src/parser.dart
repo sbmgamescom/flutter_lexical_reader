@@ -19,11 +19,14 @@ class LexicalParser extends StatefulWidget {
     this.tablePadding,
     this.paragraphPadding,
     this.numberedPadding,
+    this.tableCellPadding,
   });
-  final List<dynamic> children;
+  final Map<String, dynamic> children;
+
   final TextStyle? textStyle;
   final bool? lazyLoad;
   final EdgeInsets? tablePadding;
+  final EdgeInsets? tableCellPadding;
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
 
@@ -39,6 +42,9 @@ class _LexicalParserState extends State<LexicalParser> {
         const TextStyle(fontSize: 10);
   }
 
+  List<dynamic> get parsedChildren =>
+      widget.children['root']['children'] as List<dynamic>;
+
   @override
   Widget build(BuildContext context) {
     return PropsInheritedWidget(
@@ -46,17 +52,18 @@ class _LexicalParserState extends State<LexicalParser> {
       tablePadding: widget.tablePadding,
       paragraphPadding: widget.paragraphPadding,
       numberedPadding: widget.numberedPadding,
+      tableCellPadding: widget.tableCellPadding,
       child: widget.lazyLoad == true
           ? ListView.builder(
               itemCount: widget.children.length,
               itemBuilder: (context, index) {
-                return parseJsonChildrenWidget([widget.children[index]],
+                return parseJsonChildrenWidget([parsedChildren[index]],
                     textStyle: textStyle)[0];
               },
             )
           : ListView(
-              children: parseJsonChildrenWidget(widget.children,
-                  textStyle: textStyle),
+              children:
+                  parseJsonChildrenWidget(parsedChildren, textStyle: textStyle),
             ),
     );
   }
@@ -65,6 +72,8 @@ class _LexicalParserState extends State<LexicalParser> {
 class PropsInheritedWidget extends InheritedWidget {
   final TextStyle textStyle;
   final EdgeInsets? tablePadding;
+  final EdgeInsets? tableCellPadding;
+
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
 
@@ -75,6 +84,7 @@ class PropsInheritedWidget extends InheritedWidget {
     this.tablePadding,
     this.paragraphPadding,
     this.numberedPadding,
+    this.tableCellPadding,
   }) : super(key: key, child: child);
 
   static PropsInheritedWidget? maybeOf(BuildContext context) {

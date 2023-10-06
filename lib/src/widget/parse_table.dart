@@ -16,27 +16,42 @@ class _ParseTable extends StatelessWidget {
   TableRow _buildTableRow(dynamic row) {
     List<Widget> rowCells = (row['children'] as List? ?? [])
         .where((cell) => cell['type'] == 'tablecell')
-        .map<Widget>(_buildTableCell)
+        .map<Widget>((cell) => _BuildTableCell(cell))
         .toList();
 
-    return TableRow(children: rowCells);
-  }
-
-  Widget _buildTableCell(dynamic cell) {
-    return Column(
-      children: parseJsonChildrenWidget(cell['children'] ?? []),
+    return TableRow(
+      children: rowCells,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final padding = PropsInheritedWidget.of(context)?.tablePadding ??
+    final tablePadding = PropsInheritedWidget.of(context)?.tablePadding ??
         const EdgeInsets.all(2.0);
     return Padding(
-      padding: padding,
+      padding: tablePadding,
       child: Table(
         children: _buildTableRows(child['children'] as List? ?? []),
         border: TableBorder.all(color: Colors.black54),
+      ),
+    );
+  }
+}
+
+class _BuildTableCell extends StatelessWidget {
+  const _BuildTableCell(this.cell);
+
+  final dynamic cell;
+
+  @override
+  Widget build(BuildContext context) {
+    final tableCellPadding =
+        PropsInheritedWidget.of(context)?.tableCellPadding ??
+            const EdgeInsets.all(8.0);
+    return Padding(
+      padding: tableCellPadding,
+      child: Column(
+        children: parseJsonChildrenWidget(cell['children'] ?? []),
       ),
     );
   }
