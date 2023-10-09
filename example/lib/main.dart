@@ -55,71 +55,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: const Center(
+
+          // child: Padding(
+          //         padding: const EdgeInsets.all(16.0),
+          //         child: LexicalParser(
+          //           children: testJson,
+          //           tableCellPadding: const EdgeInsets.all(0),
+          //           mathOptions: MathOptions(color: Colors.red),
+          //         ),
+          //       );
+          ),
     );
   }
 }
+
+final testJson =
+    '''{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Headline1","type":"text","version":1}],"direction":"ltr","format":"justify","indent":0,"type":"heading","version":1,"tag":"h1"},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Headline2","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"heading","version":1,"tag":"h2"},{"children":[],"direction":"ltr","format":"justify","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"Скорость ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"color: #bd2828;","text":"чтения ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":"– это ","type":"text","version":1},{"detail":0,"format":1,"mode":"normal","style":"","text":"количество ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":"количество2 ","type":"text","version":1},{"detail":0,"format":2,"mode":"normal","style":"","text":"количество3  ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":"слов, ","type":"text","version":1},{"detail":0,"format":8,"mode":"normal","style":"","text":"прочитанных ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":"за 1 ","type":"text","version":1},{"detail":0,"format":4,"mode":"normal","style":"","text":"минуту","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":". Ученик ","type":"text","version":1},{"detail":0,"format":32,"mode":"normal","style":"","text":"должен ","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":"читать ","type":"text","version":1},{"detail":0,"format":64,"mode":"normal","style":"","text":"выразительно","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":", не меняя темп чтения, соблюдая знаки препинания, чётко проговаривая слова. ","type":"text","version":1}],"direction":"ltr","format":"justify","indent":0,"type":"paragraph","version":1},{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1},{"children":[{"children":[{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"test text","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":2},{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Проверка текста","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0}],"direction":null,"format":"","indent":0,"type":"tablerow","version":1},{"children":[{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":2},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[{"equation":"\\mathrm{abs}\\left(123\\right)","inline":true,"type":"equation","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[{"equation":"\\mathrm{abs}\\left(asd\\right)","inline":true,"type":"equation","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0}],"direction":null,"format":"","indent":0,"type":"tablerow","version":1},{"children":[{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":2},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0}],"direction":null,"format":"","indent":0,"type":"tablerow","version":1},{"children":[{"children":[{"children":[{"equation":"AgHg","inline":true,"type":"equation","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":2},{"children":[{"children":[{"altText":"","caption":{"editorState":{"root":{"children":[],"direction":null,"format":"","indent":0,"type":"root","version":1}}},"height":0,"maxWidth":772,"showCaption":false,"src":["https://test-beyim-content.s3.eu-central-1.amazonaws.com/651a5f561a00123b63c4be9b/58369932-eeb8-4bfe-b422-2400bf6c3f92.jpeg"],"type":"image","version":1,"width":0}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0},{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1,"headerState":0}],"direction":null,"format":"","indent":0,"type":"tablerow","version":1}],"direction":null,"format":"","indent":0,"type":"table","version":1},{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}''';
