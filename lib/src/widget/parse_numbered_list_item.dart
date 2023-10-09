@@ -8,9 +8,8 @@ class _ParseNumberedListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: parseJsonChildrenWidget(child['children'] ?? []),
+    return RichText(
+      text: TextSpan(children: parseJsonChild(child['children'] ?? [])),
     );
   }
 }

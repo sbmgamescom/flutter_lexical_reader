@@ -47,7 +47,7 @@ class _LexicalParserState extends State<LexicalParser> {
 
   @override
   Widget build(BuildContext context) {
-    return PropsInheritedWidget(
+    return _PropsInheritedWidget(
       textStyle: textStyle,
       tablePadding: widget.tablePadding,
       paragraphPadding: widget.paragraphPadding,
@@ -69,7 +69,7 @@ class _LexicalParserState extends State<LexicalParser> {
   }
 }
 
-class PropsInheritedWidget extends InheritedWidget {
+class _PropsInheritedWidget extends InheritedWidget {
   final TextStyle textStyle;
   final EdgeInsets? tablePadding;
   final EdgeInsets? tableCellPadding;
@@ -77,7 +77,7 @@ class PropsInheritedWidget extends InheritedWidget {
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
 
-  const PropsInheritedWidget({
+  const _PropsInheritedWidget({
     Key? key,
     required this.textStyle,
     required Widget child,
@@ -87,18 +87,18 @@ class PropsInheritedWidget extends InheritedWidget {
     this.tableCellPadding,
   }) : super(key: key, child: child);
 
-  static PropsInheritedWidget? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<PropsInheritedWidget>();
+  static _PropsInheritedWidget? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_PropsInheritedWidget>();
   }
 
-  static PropsInheritedWidget? of(BuildContext context) {
-    final PropsInheritedWidget? result = maybeOf(context);
-    assert(result != null, 'No PropsInheritedWidget found in context');
+  static _PropsInheritedWidget? of(BuildContext context) {
+    final _PropsInheritedWidget? result = maybeOf(context);
+    assert(result != null, 'No _PropsInheritedWidget found in context');
     return result!;
   }
 
   @override
-  bool updateShouldNotify(covariant PropsInheritedWidget oldWidget) {
+  bool updateShouldNotify(covariant _PropsInheritedWidget oldWidget) {
     return textStyle != oldWidget.textStyle;
   }
 }

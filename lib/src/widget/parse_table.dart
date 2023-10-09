@@ -26,7 +26,7 @@ class _ParseTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tablePadding = PropsInheritedWidget.of(context)?.tablePadding ??
+    final tablePadding = _PropsInheritedWidget.of(context)?.tablePadding ??
         const EdgeInsets.all(2.0);
     return Padding(
       padding: tablePadding,
@@ -46,7 +46,7 @@ class _BuildTableCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tableCellPadding =
-        PropsInheritedWidget.of(context)?.tableCellPadding ??
+        _PropsInheritedWidget.of(context)?.tableCellPadding ??
             const EdgeInsets.all(8.0);
     return Padding(
       padding: tableCellPadding,
