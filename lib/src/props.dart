@@ -1,21 +1,23 @@
 part of 'parser.dart';
 
 class _PropsInheritedWidget extends InheritedWidget {
-  final TextStyle textStyle;
+  final TextStyle? paragraphStyle;
   final EdgeInsets? tablePadding;
   final EdgeInsets? tableCellPadding;
 
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
+  final MathOptions? mathOptions;
 
   const _PropsInheritedWidget({
     Key? key,
-    required this.textStyle,
+    this.paragraphStyle,
     required Widget child,
     this.tablePadding,
     this.paragraphPadding,
     this.numberedPadding,
     this.tableCellPadding,
+    this.mathOptions,
   }) : super(key: key, child: child);
 
   static _PropsInheritedWidget? maybeOf(BuildContext context) {
@@ -30,6 +32,6 @@ class _PropsInheritedWidget extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant _PropsInheritedWidget oldWidget) {
-    return textStyle != oldWidget.textStyle;
+    return true;
   }
 }

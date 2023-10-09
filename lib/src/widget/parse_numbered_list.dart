@@ -8,7 +8,7 @@ class _ParseNumberedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = _PropsInheritedWidget.of(context)!.textStyle;
+    final paragraphStyle = _PropsInheritedWidget.of(context)!.paragraphStyle;
     final numberedPadding =
         _PropsInheritedWidget.of(context)?.numberedPadding ??
             const EdgeInsets.only(left: 20.0, bottom: 20);
@@ -27,7 +27,7 @@ class _ParseNumberedList extends StatelessWidget {
               children: [
                 Text(
                   '${count++}. ',
-                  style: textStyle,
+                  style: paragraphStyle,
                 ),
                 Expanded(child: widget),
               ],
@@ -45,7 +45,7 @@ class _ParseNumberedList extends StatelessWidget {
               children: [
                 Text(
                   '• ',
-                  style: textStyle,
+                  style: paragraphStyle,
                 ),
                 Expanded(child: widget),
               ],
