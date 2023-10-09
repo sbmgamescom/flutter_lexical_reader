@@ -1,7 +1,9 @@
 name: flutter_lexical_reader
-description: A new Flutter package project.
+description: is a powerful and flexible library for reading and analyzing lexical structures in text data inside Flutter applications. This package provides intuitive tools for extracting, analyzing and manipulating lexical elements such as words, phrases and sentences.
 version: 0.0.1
 homepage:
+repository: https://github.com/sbmgamescom/flutter_lexical_reader
+# publish_to: 'https://pub.dev'
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
