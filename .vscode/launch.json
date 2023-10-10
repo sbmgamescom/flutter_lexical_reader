@@ -20,6 +20,14 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "Run flutter_lexical_reader tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "test/flutter_lexical_reader_test.dart", 
+            "args": ["--no-pub"],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
