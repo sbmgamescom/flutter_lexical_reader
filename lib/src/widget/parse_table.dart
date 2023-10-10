@@ -1,7 +1,8 @@
 part of '../parser.dart';
 
-class _ParseTable extends StatelessWidget {
-  const _ParseTable({
+class ParseTable extends StatelessWidget {
+  const ParseTable({
+    super.key,
     required this.child,
   });
   final Map<String, dynamic> child;
@@ -14,7 +15,7 @@ class _ParseTable extends StatelessWidget {
   }
 
   TableRow _buildTableRow(dynamic row) {
-    List<Widget> rowCells = (row['children'] as List? ?? [])
+    List<Widget> rowCells = (row['children'])
         .where((cell) => cell['type'] == 'tablecell')
         .map<Widget>((cell) => _BuildTableCell(cell))
         .toList();
@@ -28,10 +29,11 @@ class _ParseTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final tablePadding = _PropsInheritedWidget.of(context)?.tablePadding ??
         const EdgeInsets.all(2.0);
+    print(child['children']);
     return Padding(
       padding: tablePadding,
       child: Table(
-        children: _buildTableRows(child['children'] as List? ?? []),
+        children: _buildTableRows(child['children']),
         border: TableBorder.all(color: Colors.black54),
       ),
     );

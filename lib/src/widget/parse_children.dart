@@ -14,7 +14,7 @@ List<Widget> parseJsonChildrenWidget(List<dynamic> children) {
         case 'quote':
           return _ParseParagraph(child: child);
         case 'table':
-          return _ParseTable(child: child);
+          return ParseTable(child: child);
         case 'list':
           return _ParseNumberedList(child: child);
         case 'listitem':
