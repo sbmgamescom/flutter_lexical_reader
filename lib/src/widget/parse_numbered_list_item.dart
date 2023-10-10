@@ -9,7 +9,8 @@ class _ParseNumberedListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RichText(
-      text: TextSpan(children: parseJsonChild(child['children'] ?? [])),
+      text:
+          TextSpan(children: parseJsonChild(child['children'] ?? [], context)),
     );
   }
 }

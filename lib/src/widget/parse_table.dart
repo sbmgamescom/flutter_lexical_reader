@@ -1,23 +1,29 @@
 part of '../parser.dart';
 
-class _ParseTable extends StatelessWidget {
-  const _ParseTable({
+class ParseTable extends StatelessWidget {
+  const ParseTable({
+    super.key,
     required this.child,
   });
   final Map<String, dynamic> child;
 
   List<TableRow> _buildTableRows(List<dynamic> childrenData) {
-    return childrenData
+    final temp = childrenData
         .where((row) => row['type'] == 'tablerow')
-        .map<TableRow>(_buildTableRow)
+        .map<TableRow>((tableRow) => _buildTableRow(tableRow))
         .toList();
+    return temp;
   }
 
   TableRow _buildTableRow(dynamic row) {
-    List<Widget> rowCells = (row['children'] as List? ?? [])
+    List<Widget> rowCells = (row['children'] ?? [])
         .where((cell) => cell['type'] == 'tablecell')
         .map<Widget>((cell) => _BuildTableCell(cell))
         .toList();
+
+    if (rowCells.isEmpty) {
+      rowCells.add(const SizedBox());
+    }
 
     return TableRow(
       children: rowCells,
@@ -28,10 +34,11 @@ class _ParseTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final tablePadding = _PropsInheritedWidget.of(context)?.tablePadding ??
         const EdgeInsets.all(2.0);
+
     return Padding(
       padding: tablePadding,
       child: Table(
-        children: _buildTableRows(child['children'] as List? ?? []),
+        children: _buildTableRows(child['children']),
         border: TableBorder.all(color: Colors.black54),
       ),
     );
@@ -56,3 +63,4 @@ class _BuildTableCell extends StatelessWidget {
     );
   }
 }
+      // .map<TableRow>((tableRow) => _buildTableRow(tableRow))
