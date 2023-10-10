@@ -46,6 +46,5 @@ List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
         break;
     }
   }
-
   return widgets;
 }
