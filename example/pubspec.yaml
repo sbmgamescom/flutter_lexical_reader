@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_lexical_reader:
+
 
 dev_dependencies:
   flutter_test:
