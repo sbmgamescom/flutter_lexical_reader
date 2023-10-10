@@ -34,15 +34,21 @@ class _ParseParagraph extends StatelessWidget {
   TextStyle _textStyle(BuildContext context, LineType? lineType) {
     final paragraphStyle = _PropsInheritedWidget.of(context)!.paragraphStyle ??
         Theme.of(context).textTheme.titleMedium ??
-        const TextStyle(fontSize: 10);
-    const h1Style = TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
+        const TextStyle(fontSize: 12);
+    final h1Style = _PropsInheritedWidget.of(context)!.h1Style ??
+        Theme.of(context).textTheme.headlineLarge ??
+        const TextStyle(fontSize: 18);
+    final h2Style = _PropsInheritedWidget.of(context)!.h2Style ??
+        Theme.of(context).textTheme.headlineMedium ??
+        const TextStyle(fontSize: 14);
 
     switch (lineType) {
       case LineType.h1:
         return h1Style;
-
       case LineType.paragraph:
         return paragraphStyle;
+      case LineType.h2:
+        return h2Style;
       default:
         return paragraphStyle;
     }

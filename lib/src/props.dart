@@ -2,6 +2,8 @@ part of 'parser.dart';
 
 class _PropsInheritedWidget extends InheritedWidget {
   final TextStyle? paragraphStyle;
+  final TextStyle? h1Style;
+  final TextStyle? h2Style;
   final EdgeInsets? tablePadding;
   final EdgeInsets? tableCellPadding;
 
@@ -18,6 +20,8 @@ class _PropsInheritedWidget extends InheritedWidget {
     this.numberedPadding,
     this.tableCellPadding,
     this.mathOptions,
+    this.h1Style,
+    this.h2Style,
   }) : super(key: key, child: child);
 
   static _PropsInheritedWidget? maybeOf(BuildContext context) {

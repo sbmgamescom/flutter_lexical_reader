@@ -22,10 +22,15 @@ class LexicalParser extends StatefulWidget {
     this.numberedPadding,
     this.tableCellPadding,
     this.mathOptions,
+    this.h1Style,
+    this.h2Style,
   });
   final Map<String, dynamic> children;
 
   final TextStyle? paragraphStyle;
+  final TextStyle? h1Style;
+  final TextStyle? h2Style;
+
   final bool? lazyLoad;
   final EdgeInsets? tablePadding;
   final EdgeInsets? tableCellPadding;
@@ -45,6 +50,8 @@ class _LexicalParserState extends State<LexicalParser> {
   Widget build(BuildContext context) {
     return _PropsInheritedWidget(
       paragraphStyle: widget.paragraphStyle,
+      h1Style: widget.h1Style,
+      h2Style: widget.h2Style,
       tablePadding: widget.tablePadding,
       paragraphPadding: widget.paragraphPadding,
       numberedPadding: widget.numberedPadding,
