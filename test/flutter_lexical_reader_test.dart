@@ -40,7 +40,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        home: LexicalParser(children: mockData),
+        home: LexicalParser(sourceMap: mockData),
       ),
     );
 

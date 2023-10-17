@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
@@ -11,10 +13,17 @@ part 'widget/parse_numbered_list_item.dart';
 part 'widget/parse_children.dart';
 part 'props.dart';
 
+/// The primary widget for parsing and rendering complex JSON structures.
+///
+/// The LexicalParser can either take a direct `Map<String, dynamic>` structure through `sourceMap`
+/// or a raw JSON string through `sourceString`. It processes this input to generate a visual representation.
+///
+/// Other stylistic and structural properties can also be customized.
 class LexicalParser extends StatefulWidget {
   const LexicalParser({
     super.key,
-    required this.children,
+    this.sourceMap,
+    this.sourceString,
     this.paragraphStyle,
     this.lazyLoad,
     this.tablePadding,
@@ -25,7 +34,12 @@ class LexicalParser extends StatefulWidget {
     this.h1Style,
     this.h2Style,
   });
-  final Map<String, dynamic> children;
+
+  /// Direct input of the JSON structure.
+  final Map<String, dynamic>? sourceMap;
+
+  /// Raw JSON string, which will be parsed internally.
+  final String? sourceString;
 
   final TextStyle? paragraphStyle;
   final TextStyle? h1Style;
@@ -43,8 +57,20 @@ class LexicalParser extends StatefulWidget {
 }
 
 class _LexicalParserState extends State<LexicalParser> {
+  Map<String, dynamic>? _data;
+
   List<dynamic> get parsedChildren =>
-      widget.children['root']['children'] as List<dynamic>;
+      _data?['root']['children'] as List<dynamic>? ?? [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.sourceString != null) {
+      _data = jsonDecode(widget.sourceString!);
+    } else {
+      _data = widget.sourceMap;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +85,7 @@ class _LexicalParserState extends State<LexicalParser> {
       mathOptions: widget.mathOptions,
       child: widget.lazyLoad == true
           ? ListView.builder(
-              itemCount: widget.children.length,
+              itemCount: parsedChildren.length,
               itemBuilder: (context, index) {
                 return parseJsonChildrenWidget([parsedChildren[index]])[0];
               },
