@@ -1,5 +1,5 @@
-## 0.0.5
+## 0.0.7
 
-fix base64 image
+fix math pow
 
 * TODO: Describe initial release.
