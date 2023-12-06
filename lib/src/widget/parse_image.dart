@@ -4,7 +4,6 @@ WidgetSpan _parseImage(Map<String, dynamic> child) {
   final double width = double.parse(child['maxWidth'].toString());
   final imageSource = child['src'];
 
-  log('imageSource $imageSource');
   if (imageSource is String && imageSource.startsWith('data:image')) {
     // Убираем часть описания MIME типа для Base64 строки
     final String base64String = imageSource.split(',')[1];
@@ -12,7 +11,7 @@ WidgetSpan _parseImage(Map<String, dynamic> child) {
     return WidgetSpan(
       child: Image.memory(
         bytes,
-        fit: BoxFit.cover,
+        fit: BoxFit.fitWidth,
         errorBuilder: (context, error, stackTrace) {
           return const Row(
             children: [
