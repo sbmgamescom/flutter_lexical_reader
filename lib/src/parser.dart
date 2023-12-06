@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
 part 'widget/parse_text.dart';
@@ -76,6 +78,7 @@ class _LexicalParserState extends State<LexicalParser> {
     } else {
       _data = widget.sourceMap;
     }
+    log(_data.toString());
   }
 
   @override
