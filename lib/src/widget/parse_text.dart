@@ -1,25 +1,35 @@
 part of '../parser.dart';
 
-TextSpan _parseText(Map<String, dynamic> child) {
+InlineSpan _parseText(Map<String, dynamic> child) {
   final baseStyle = _textStyle(child['format']);
   final fontSize = baseStyle.fontSize ?? 12;
 
-  TextSpan mainSpan;
+  InlineSpan mainSpan;
 
   if (_isSubscript(child['format'])) {
-    mainSpan = TextSpan(
-      text: child['text'],
-      style: baseStyle.copyWith(
-        fontSize: fontSize * 0.7,
-        height: 0.8,
+    mainSpan = WidgetSpan(
+      child: Transform.translate(
+        offset: const Offset(0, 5),
+        child: Text(
+          child['text'],
+          style: baseStyle.copyWith(
+            fontSize: fontSize,
+          ),
+          textAlign: TextAlign.start,
+        ),
       ),
     );
   } else if (_isSuperscript(child['format'])) {
-    mainSpan = TextSpan(
-      text: child['text'],
-      style: baseStyle.copyWith(
-        fontSize: fontSize * 0.7,
-        height: 3.2,
+    mainSpan = WidgetSpan(
+      child: Transform.translate(
+        offset: const Offset(0, -5),
+        child: Text(
+          child['text'],
+          style: baseStyle.copyWith(
+            fontSize: fontSize,
+          ),
+          textAlign: TextAlign.start,
+        ),
       ),
     );
   } else {
