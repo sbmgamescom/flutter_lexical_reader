@@ -38,6 +38,7 @@ class LexicalParser extends StatefulWidget {
     this.shrinkWrap = false,
     this.scrollController,
     this.scrollPhysics,
+    this.imageOptions,
   });
 
   /// Direct input of the JSON structure.
@@ -59,6 +60,7 @@ class LexicalParser extends StatefulWidget {
   final bool shrinkWrap;
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
+  final ImageOptions? imageOptions;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -92,6 +94,7 @@ class _LexicalParserState extends State<LexicalParser> {
       numberedPadding: widget.numberedPadding,
       tableCellPadding: widget.tableCellPadding,
       mathOptions: widget.mathOptions,
+      imageOptions: widget.imageOptions,
       child: widget.lazyLoad == true
           ? ListView.builder(
               controller: widget.scrollController,
