@@ -1,5 +1,3 @@
-## 0.0.7
+## 0.0.8
 
-fix math pow
-
-* TODO: Describe initial release.
+add image open window and image zoom 
