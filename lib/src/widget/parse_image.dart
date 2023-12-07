@@ -16,7 +16,7 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
       errorBuilder: (context, error, stackTrace) {
         return const Row(
           children: [
-            Text('Не удалось загрузить BASE изображение'),
+            Text('Failed to load BASE64 image'),
             Icon(Icons.error),
           ],
         );
@@ -30,7 +30,7 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
       errorBuilder: (context, error, stackTrace) {
         return const Row(
           children: [
-            Text('Не удалось загрузить изображение'),
+            Text('Failed to load image'),
             Icon(Icons.error),
           ],
         );
@@ -39,10 +39,7 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
   }
   return WidgetSpan(
     child: GestureDetector(
-      onTap: () {
-        log('tap');
-        _fullScreenImage(context, image);
-      },
+      onTap: () => _fullScreenImage(context, image),
       child: image,
     ),
   );
