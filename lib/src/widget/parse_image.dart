@@ -18,7 +18,7 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
   } else {
     image = Image.network(
       child['src'][0],
-      width: width / 2,
+      // width: width / 2,
       fit: BoxFit.fitWidth,
       errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(),
     );

@@ -5,6 +5,7 @@ WidgetSpan _parseEquation(
   MathOptions? mathOptions,
 }) {
   return WidgetSpan(
+    alignment: PlaceholderAlignment.middle,
     child: Math.tex(
       child['equation'],
       options: mathOptions,
