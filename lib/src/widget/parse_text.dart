@@ -34,13 +34,14 @@ InlineSpan _parseText(Map<String, dynamic> child) {
     );
   } else {
     mainSpan = TextSpan(
-      children: [
-        // const TextSpan(
-        //     text: '/1    ', style: TextStyle(color: Colors.transparent)),
-        const WidgetSpan(child: SizedBox(width: 20)),
-        TextSpan(text: child['text'])
-      ],
-      // text: child['text'],
+      //Fix indent
+      // children: [
+      //   // const TextSpan(
+      //   //     text: '/1    ', style: TextStyle(color: Colors.transparent)),
+      //   const WidgetSpan(child: SizedBox(width: 20)),
+      //   TextSpan(text: child['text'])
+      // ],
+      text: child['text'],
       style: baseStyle,
     );
   }
