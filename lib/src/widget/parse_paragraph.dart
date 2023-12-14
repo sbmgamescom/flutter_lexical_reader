@@ -31,6 +31,21 @@ class _ParseParagraph extends StatelessWidget {
     );
   }
 
+  TextAlign _alignmentFromString(String? format) {
+    switch (format) {
+      case 'center':
+        return TextAlign.center;
+      case 'left':
+        return TextAlign.start;
+      case 'justify':
+        return TextAlign.justify;
+      case 'right':
+        return TextAlign.end;
+      default:
+        return TextAlign.start;
+    }
+  }
+
   TextStyle _textStyle(BuildContext context, LineType? lineType) {
     final paragraphStyle = _PropsInheritedWidget.of(context)!.paragraphStyle ??
         Theme.of(context).textTheme.titleMedium ??
@@ -59,19 +74,4 @@ enum LineType {
   h1,
   h2,
   paragraph,
-}
-
-TextAlign _alignmentFromString(String? format) {
-  switch (format) {
-    case 'center':
-      return TextAlign.center;
-    case 'left':
-      return TextAlign.start;
-    case 'justify':
-      return TextAlign.justify;
-    case 'right':
-      return TextAlign.end;
-    default:
-      return TextAlign.start;
-  }
 }

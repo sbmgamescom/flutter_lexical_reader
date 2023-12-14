@@ -36,7 +36,7 @@ List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
         widgets.add(_parseText(child));
         break;
       case 'image':
-        widgets.add(_parseImage(child));
+        widgets.add(_parseImage(child, context));
         break;
       case 'equation':
         widgets.add(_parseEquation(child, mathOptions: mathOptions));

@@ -1,5 +1,3 @@
-## 0.0.5
+## 0.0.8
 
-fix base64 image
-
-* TODO: Describe initial release.
+add image open window and image zoom 

@@ -10,6 +10,7 @@ class _PropsInheritedWidget extends InheritedWidget {
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
   final MathOptions? mathOptions;
+  final ImageOptions? imageOptions;
 
   const _PropsInheritedWidget({
     Key? key,
@@ -22,6 +23,7 @@ class _PropsInheritedWidget extends InheritedWidget {
     this.mathOptions,
     this.h1Style,
     this.h2Style,
+    this.imageOptions,
   }) : super(key: key, child: child);
 
   static _PropsInheritedWidget? maybeOf(BuildContext context) {
