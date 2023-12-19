@@ -1,14 +1,7 @@
 part of '../parser.dart';
 
-@immutable
-class Image1Options {
-  final EdgeInsetsGeometry? padding;
-
-  const Image1Options({this.padding});
-}
-
 WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
-  final double width = double.parse(child['maxWidth'].toString());
+  // final double width = double.parse(child['maxWidth'].toString());
   final imageSource = child['src'];
   final Image image;
   final imageOptions = _PropsInheritedWidget.of(context)?.imageOptions;
@@ -24,7 +17,6 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
   } else {
     image = Image.network(
       child['src'][0],
-      // width: width / 2,
       fit: BoxFit.fitWidth,
       errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(),
     );
@@ -58,11 +50,17 @@ void _fullScreenImage(BuildContext context, Widget child) {
               )),
         ),
         body: Center(
-          child: InteractiveViewer(
-            panEnabled: false,
-            minScale: 0.5,
-            maxScale: 4.0,
-            child: child,
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: InteractiveViewer(
+              // constrained: false, // Установите constrained в false
+              // panEnabled: false, // Включите возможность панорамирования
+              minScale: 0.5,
+              maxScale: 4.0,
+              // boundaryMargin: EdgeInsets.all(double.infinity),
+              child: child,
+            ),
           ),
         ),
       ),

@@ -10,7 +10,7 @@ class _PropsInheritedWidget extends InheritedWidget {
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
   final MathEquationOptions mathEquationOptions;
-  final Image1Options imageOptions;
+  final ImageOptions imageOptions;
 
   const _PropsInheritedWidget({
     Key? key,

@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_lexical_reader/src/model/math_equation_options.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
+import 'model/image_options.dart';
+
 part 'widget/parse_text.dart';
 part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
@@ -62,7 +64,7 @@ class LexicalParser extends StatefulWidget {
   final bool shrinkWrap;
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
-  final Image1Options imageOptions;
+  final ImageOptions imageOptions;
   final EdgeInsetsGeometry? mathEquationPadding;
 
   @override
