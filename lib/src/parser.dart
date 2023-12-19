@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_lexical_reader/src/model/math_equation_options.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
 part 'widget/parse_text.dart';
@@ -32,13 +33,14 @@ class LexicalParser extends StatefulWidget {
     this.paragraphPadding,
     this.numberedPadding,
     this.tableCellPadding,
-    this.mathOptions,
+    this.mathEquationOptions = const MathEquationOptions(),
     this.h1Style,
     this.h2Style,
     this.shrinkWrap = false,
     this.scrollController,
     this.scrollPhysics,
-    this.imageOptions,
+    this.imageOptions = const ImageOptions(),
+    this.mathEquationPadding,
   });
 
   /// Direct input of the JSON structure.
@@ -56,11 +58,12 @@ class LexicalParser extends StatefulWidget {
   final EdgeInsets? tableCellPadding;
   final EdgeInsets? paragraphPadding;
   final EdgeInsets? numberedPadding;
-  final MathOptions? mathOptions;
+  final MathEquationOptions mathEquationOptions;
   final bool shrinkWrap;
   final ScrollController? scrollController;
   final ScrollPhysics? scrollPhysics;
-  final ImageOptions? imageOptions;
+  final Image1Options imageOptions;
+  final EdgeInsetsGeometry? mathEquationPadding;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -93,7 +96,7 @@ class _LexicalParserState extends State<LexicalParser> {
       paragraphPadding: widget.paragraphPadding,
       numberedPadding: widget.numberedPadding,
       tableCellPadding: widget.tableCellPadding,
-      mathOptions: widget.mathOptions,
+      mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
       child: widget.lazyLoad == true
           ? ListView.builder(

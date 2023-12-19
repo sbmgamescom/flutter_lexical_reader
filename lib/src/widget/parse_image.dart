@@ -1,11 +1,17 @@
 part of '../parser.dart';
 
-class ImageOptions {}
+@immutable
+class Image1Options {
+  final EdgeInsetsGeometry? padding;
+
+  const Image1Options({this.padding});
+}
 
 WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
   final double width = double.parse(child['maxWidth'].toString());
   final imageSource = child['src'];
   final Image image;
+  final imageOptions = _PropsInheritedWidget.of(context)?.imageOptions;
 
   if (imageSource is String && imageSource.startsWith('data:image')) {
     final String base64String = imageSource.split(',')[1];
@@ -24,9 +30,12 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
     );
   }
   return WidgetSpan(
-    child: GestureDetector(
-      onTap: () => _fullScreenImage(context, image),
-      child: image,
+    child: Padding(
+      padding: imageOptions?.padding ?? const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () => _fullScreenImage(context, image),
+        child: image,
+      ),
     ),
   );
 }

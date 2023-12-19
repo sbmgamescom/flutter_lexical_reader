@@ -28,7 +28,7 @@ List<Widget> parseJsonChildrenWidget(List<dynamic> children) {
 
 List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
   final List<InlineSpan> widgets = [];
-  final mathOptions = _PropsInheritedWidget.of(context)!.mathOptions;
+  final props = _PropsInheritedWidget.of(context)!;
 
   for (var child in children) {
     switch (child['type']) {
@@ -39,7 +39,7 @@ List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
         widgets.add(_parseImage(child, context));
         break;
       case 'equation':
-        widgets.add(_parseEquation(child, mathOptions: mathOptions));
+        widgets.add(_parseEquation(child, options: props.mathEquationOptions));
         break;
       default:
         widgets.add(const WidgetSpan(child: SizedBox.shrink()));
