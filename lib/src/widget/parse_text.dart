@@ -33,17 +33,21 @@ InlineSpan _parseText(Map<String, dynamic> child) {
       ),
     );
   } else {
-    mainSpan = TextSpan(
-      //Fix indent
-      // children: [
-      //   // const TextSpan(
-      //   //     text: '/1    ', style: TextStyle(color: Colors.transparent)),
-      //   const WidgetSpan(child: SizedBox(width: 20)),
-      //   TextSpan(text: child['text'])
-      // ],
-      text: child['text'],
-      style: baseStyle,
-    );
+    if (child['text'].startsWith('     ')) {
+      mainSpan = TextSpan(
+        children: [
+          const WidgetSpan(child: SizedBox(width: 25)),
+          TextSpan(
+              text: child['text'].substring(5)) // Обрезаем первые 5 пробелов
+        ],
+        style: baseStyle,
+      );
+    } else {
+      mainSpan = TextSpan(
+        text: child['text'],
+        style: baseStyle,
+      );
+    }
   }
   return mainSpan;
 }
