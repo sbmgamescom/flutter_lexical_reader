@@ -18,7 +18,7 @@ List<Widget> parseJsonChildrenWidget(List<dynamic> children) {
         case 'list':
           return _ParseNumberedList(child: child);
         case 'listitem':
-          return _ParseNumberedListItem(child: child);
+          return _ParseParagraph(child: child);
         default:
           return const SizedBox.shrink();
       }
@@ -33,7 +33,8 @@ List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
   for (var child in children) {
     switch (child['type']) {
       case 'text':
-        widgets.add(_parseText(child));
+        widgets
+            .add(_parseText(child, props.paragraphStyle ?? const TextStyle()));
         break;
       case 'image':
         widgets.add(_parseImage(child, context));
