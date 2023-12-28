@@ -11,7 +11,7 @@ class _ParseNumberedList extends StatelessWidget {
     final paragraphStyle = _PropsInheritedWidget.of(context)!.paragraphStyle;
     final numberedPadding =
         _PropsInheritedWidget.of(context)?.numberedPadding ??
-            const EdgeInsets.only(left: 20.0, bottom: 20);
+            const EdgeInsets.only(left: 0.0, bottom: 0);
     List<Widget> childrenWidgets = parseJsonChildrenWidget(
       child['children'] ?? [],
     );
@@ -23,7 +23,7 @@ class _ParseNumberedList extends StatelessWidget {
         child: Column(
           children: childrenWidgets.map((widget) {
             return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '${count++}. ',
@@ -41,7 +41,7 @@ class _ParseNumberedList extends StatelessWidget {
         child: Column(
           children: childrenWidgets.map((widget) {
             return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '• ',

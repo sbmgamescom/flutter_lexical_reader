@@ -1,7 +1,7 @@
 part of '../parser.dart';
 
-InlineSpan _parseText(Map<String, dynamic> child) {
-  final baseStyle = _textStyle(child['format']);
+InlineSpan _parseText(Map<String, dynamic> child, TextStyle textStyle) {
+  final baseStyle = _textStyle(child['format'], textStyle);
   final fontSize = baseStyle.fontSize ?? 12;
 
   InlineSpan mainSpan;
@@ -60,15 +60,15 @@ bool _isSubscript(int? format) {
   return format != null && (format & 32) != 0;
 }
 
-TextStyle _textStyle(int? format) {
-  const textStyle = TextStyle();
+TextStyle _textStyle(int? format, TextStyle style) {
+  final textStyle = style;
   FontWeight fontWeight = FontWeight.normal;
   FontStyle fontStyle = FontStyle.normal;
   TextDecoration decoration = TextDecoration.none;
   bool isStrikethrough = false;
 
   if (format == null) {
-    return const TextStyle();
+    return style;
   }
   if (format & 1 != 0) fontWeight = FontWeight.bold;
   if (format & 2 != 0) fontStyle = FontStyle.italic;
