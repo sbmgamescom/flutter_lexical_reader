@@ -44,8 +44,8 @@ WidgetSpan _parseEquation(
     child: Padding(
         padding: options.padding ?? const EdgeInsets.all(0),
         child: FadingEdgeScrollView.fromSingleChildScrollView(
-          // gradientFractionOnStart: 0.5,
-          gradientFractionOnEnd: 0.7,
+          gradientFractionOnStart: 0.3,
+          gradientFractionOnEnd: 0.3,
           shouldDisposeScrollController: true,
           gradientColor: Colors.red,
           child: SingleChildScrollView(
