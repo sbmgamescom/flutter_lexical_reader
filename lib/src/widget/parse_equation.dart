@@ -43,25 +43,116 @@ WidgetSpan _parseEquation(
     alignment: PlaceholderAlignment.middle,
     child: Padding(
         padding: options.padding ?? const EdgeInsets.all(0),
-        child: FadingEdgeScrollView.fromSingleChildScrollView(
-          gradientFractionOnStart: 0.3,
-          gradientFractionOnEnd: 0.3,
-          shouldDisposeScrollController: true,
-          gradientColor: Colors.red,
-          child: SingleChildScrollView(
-            controller: ScrollController(),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            scrollDirection: Axis.horizontal,
-            child: Math.tex(
-              child['equation'],
-              options: options.mathOptions,
-              settings: options.textParserSettings,
-              textStyle: options.textStyle,
-              textScaleFactor: options.textScaleFactor,
-            ),
+        child: OverflowSmokeWidget(
+          child: Math.tex(
+            child['equation'],
+            options: options.mathOptions,
+            settings: options.textParserSettings,
+            textStyle: options.textStyle,
+            textScaleFactor: options.textScaleFactor,
           ),
         )),
   );
+}
+
+class OverflowSmokeWidget extends StatefulWidget {
+  final Widget child;
+  OverflowSmokeWidget({Key? key, required this.child}) : super(key: key);
+
+  @override
+  _OverflowSmokeWidgetState createState() => _OverflowSmokeWidgetState();
+}
+
+class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
+  bool _isOverflowingRight = false;
+  bool _isOverflowingLeft = false;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  void _checkOverflow() {
+    if (_scrollController.position.maxScrollExtent > 0) {
+      setState(() {
+        _isOverflowingRight = true;
+      });
+    }
+    if (_scrollController.position.minScrollExtent < 0) {
+      setState(() {
+        _isOverflowingLeft = true;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            if (notification.metrics.extentAfter == 0 && _isOverflowingRight) {
+              setState(() {
+                _isOverflowingRight = false;
+              });
+            } else if (notification.metrics.extentAfter > 0 &&
+                !_isOverflowingRight) {
+              setState(() {
+                _isOverflowingRight = true;
+              });
+            }
+
+            if (notification.metrics.extentBefore == 0 && _isOverflowingLeft) {
+              setState(() {
+                _isOverflowingLeft = false;
+              });
+            } else if (notification.metrics.extentBefore > 0 &&
+                !_isOverflowingLeft) {
+              setState(() {
+                _isOverflowingLeft = true;
+              });
+            }
+            return true;
+          },
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            scrollDirection: Axis.horizontal,
+            child: widget.child,
+          ),
+        ),
+        if (_isOverflowingRight)
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: _buildSmokeEffect(),
+          ),
+        if (_isOverflowingLeft)
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: _buildSmokeEffect(),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSmokeEffect() {
+    return Container(
+      width: 20,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.black.withOpacity(0.04), Colors.black12],
+          begin: Alignment.centerRight,
+          end: Alignment.centerLeft,
+        ),
+      ),
+    );
+  }
 }
 
 class FadingEdgeScrollView extends StatefulWidget {
