@@ -3,7 +3,7 @@ part of '../parser.dart';
 WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
   // final double width = double.parse(child['maxWidth'].toString());
   final imageSource = child['src'];
-  final Image image;
+  final Widget image;
   final imageOptions = _PropsInheritedWidget.of(context)?.imageOptions;
 
   if (imageSource is String && imageSource.startsWith('data:image')) {
@@ -15,10 +15,11 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
       errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(),
     );
   } else {
-    image = Image.network(
-      child['src'][0],
+    image = CachedNetworkImage(
+      imageUrl: child['src'][0],
+      errorWidget: (context, error, stackTrace) => _imageErrorBuilder(),
       fit: BoxFit.fitWidth,
-      errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(),
+      placeholder: (context, url) => const CircularProgressIndicator(),
     );
   }
   return WidgetSpan(
