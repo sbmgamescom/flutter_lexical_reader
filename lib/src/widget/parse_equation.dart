@@ -142,16 +142,18 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
   }
 
   Widget _buildSmokeEffect() {
-    return Container(
-      width: 200,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.white.withOpacity(1),
-            Colors.white.withOpacity(0),
-          ],
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
+    return IgnorePointer(
+      child: Container(
+        width: 200,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withOpacity(1),
+              Colors.white.withOpacity(0),
+            ],
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+          ),
         ),
       ),
     );
