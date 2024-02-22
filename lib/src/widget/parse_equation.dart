@@ -74,6 +74,12 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void _checkOverflow() {
     if (_scrollController.position.maxScrollExtent > 0) {
       setState(() {
@@ -128,16 +134,64 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
             right: 0,
             top: 0,
             bottom: 0,
-            child: _buildSmokeEffect(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _buildSmokeEffect(),
+                Positioned(
+                  right: 15,
+                  child: InkWell(
+                    onTap: _scrollToEnd,
+                    child: const Icon(
+                      Icons.chevron_right_outlined,
+                      color: Color.fromRGBO(85, 187, 235, 1),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         // if (_isOverflowingLeft)
         //   Positioned(
         //     left: 0,
         //     top: 0,
         //     bottom: 0,
-        //     child: _buildSmokeEffect(),
+        //     child: Stack(
+        //       alignment: Alignment.center,
+        //       children: [
+        //         _buildSmokeEffectRight(),
+        //         Positioned(
+        //           left: 15,
+        //           child: InkWell(
+        //             onTap: _scrollToEnd,
+        //             child: const Icon(
+        //               Icons.chevron_left_outlined,
+        //               color: Color.fromRGBO(85, 187, 235, 1),
+        //             ),
+        //           ),
+        //         )
+        //       ],
+        //     ),
         //   ),
       ],
+    );
+  }
+
+  Widget _buildSmokeEffectRight() {
+    return IgnorePointer(
+      child: Container(
+        width: 100,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withOpacity(0),
+              Colors.white.withOpacity(1.0),
+            ],
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+          ),
+        ),
+      ),
     );
   }
 
@@ -149,7 +203,9 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
           gradient: LinearGradient(
             colors: [
               Colors.white.withOpacity(1),
-              Colors.white.withOpacity(0),
+              Colors.white.withOpacity(0.8),
+              Colors.white.withOpacity(0.5),
+              Colors.white.withOpacity(0.0),
             ],
             begin: Alignment.centerRight,
             end: Alignment.centerLeft,
@@ -157,5 +213,16 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
         ),
       ),
     );
+  }
+
+  void _scrollToEnd() {
+    if (_scrollController.hasClients) {
+      final position = _scrollController.position.maxScrollExtent;
+      _scrollController.animateTo(
+        position,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 }
