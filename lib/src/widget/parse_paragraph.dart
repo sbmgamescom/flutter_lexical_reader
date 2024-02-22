@@ -4,6 +4,7 @@ class _ParseParagraph extends StatelessWidget {
   const _ParseParagraph({
     required this.child,
     this.lineType,
+    // this.indent,
   });
   final Map<String, dynamic> child;
   final LineType? lineType;
@@ -17,6 +18,7 @@ class _ParseParagraph extends StatelessWidget {
     final List<InlineSpan> childrenWidgets = parseJsonChild(
       child['children'] ?? [],
       context,
+      indent: child['indent'],
     );
 
     return Padding(

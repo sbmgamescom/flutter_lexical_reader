@@ -1,6 +1,10 @@
 part of '../parser.dart';
 
-InlineSpan _parseText(Map<String, dynamic> child, TextStyle textStyle) {
+InlineSpan _parseText(
+  Map<String, dynamic> child,
+  TextStyle textStyle, {
+  int? indent,
+}) {
   final baseStyle = _textStyle(child['format'], textStyle);
   final fontSize = baseStyle.fontSize ?? 12;
 
@@ -42,7 +46,17 @@ InlineSpan _parseText(Map<String, dynamic> child, TextStyle textStyle) {
         ],
         style: baseStyle,
       );
-    } else {
+    }
+    //  else if (indent != 0) {
+    //   mainSpan = TextSpan(
+    //     children: [
+    //       WidgetSpan(child: SizedBox(width: 25 * indent!.toDouble())),
+    //       TextSpan(text: child['text'])
+    //     ],
+    //     style: baseStyle,
+    //   );
+    // }
+    else {
       mainSpan = TextSpan(
         text: child['text'],
         style: baseStyle,

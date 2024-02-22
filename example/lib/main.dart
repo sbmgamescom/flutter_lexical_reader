@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lexical_reader/flutter_lexical_reader.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,29 +28,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final mockData = {
+  final Map<String, dynamic>? mockData = {
     "root": {
       "children": [
         {
           "children": [
             {
-              "detail": 0,
-              "format": 0,
-              "mode": "normal",
-              "style": "",
-              "text": "Hello world",
-              "type": "text",
+              "equation": "OPP\\le\\notin",
+              "inline": true,
+              "type": "equation",
               "version": 1
             }
           ],
-          "direction": "ltr",
+          "direction": null,
           "format": "",
-          "indent": 0,
+          "indent": 1,
           "type": "paragraph",
           "version": 1
         }
       ],
-      "direction": "ltr",
+      "direction": null,
       "format": "",
       "indent": 0,
       "type": "root",
@@ -60,9 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: const Center(
-          // child: LexicalParser(),
-          ),
+      body: Center(
+        child: LexicalParser(
+          sourceMap: mockData,
+        ),
+      ),
     );
   }
 }
