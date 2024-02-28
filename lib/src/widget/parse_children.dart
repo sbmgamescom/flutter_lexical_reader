@@ -45,7 +45,6 @@ List<InlineSpan> parseJsonChild(
           _parseText(
             child,
             props.paragraphStyle ?? const TextStyle(),
-            indent: indent,
           ),
         );
         break;
