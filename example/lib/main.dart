@@ -65,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: LexicalParser(
           sourceMap: mockData,
+          // expanded: false,
         ),
       ),
     );

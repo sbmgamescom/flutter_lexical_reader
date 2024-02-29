@@ -8,6 +8,7 @@ import 'package:flutter_lexical_reader/src/model/math_equation_options.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
 import 'model/image_options.dart';
+import 'widget/expandable_list.dart';
 
 part 'widget/parse_text.dart';
 part 'widget/parse_equation.dart';
@@ -44,6 +45,7 @@ class LexicalParser extends StatefulWidget {
     this.scrollPhysics,
     this.imageOptions = const ImageOptions(),
     this.mathEquationPadding,
+    this.expanded,
   });
 
   /// Direct input of the JSON structure.
@@ -67,6 +69,7 @@ class LexicalParser extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final ImageOptions imageOptions;
   final EdgeInsetsGeometry? mathEquationPadding;
+  final bool? expanded;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -101,22 +104,32 @@ class _LexicalParserState extends State<LexicalParser> {
       tableCellPadding: widget.tableCellPadding,
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
-      child: widget.lazyLoad == true
-          ? ListView.builder(
-              controller: widget.scrollController,
-              physics: widget.scrollPhysics,
-              shrinkWrap: widget.shrinkWrap,
-              itemCount: parsedChildren.length,
-              itemBuilder: (context, index) {
-                return parseJsonChildrenWidget([parsedChildren[index]])[0];
-              },
-            )
-          : ListView(
-              physics: widget.scrollPhysics,
-              controller: widget.scrollController,
-              shrinkWrap: widget.shrinkWrap,
-              children: parseJsonChildrenWidget(parsedChildren),
-            ),
+      child: _buildList(),
     );
+  }
+
+  Widget _buildList() {
+    if (widget.expanded == true) {
+      return ExpandableListView(
+        children: parseJsonChildrenWidget(parsedChildren),
+      );
+    }
+
+    return widget.lazyLoad == true
+        ? ListView.builder(
+            controller: widget.scrollController,
+            physics: widget.scrollPhysics,
+            shrinkWrap: widget.shrinkWrap,
+            itemCount: parsedChildren.length,
+            itemBuilder: (context, index) {
+              return parseJsonChildrenWidget([parsedChildren[index]])[0];
+            },
+          )
+        : ListView(
+            physics: widget.scrollPhysics,
+            controller: widget.scrollController,
+            shrinkWrap: widget.shrinkWrap,
+            children: parseJsonChildrenWidget(parsedChildren),
+          );
   }
 }
