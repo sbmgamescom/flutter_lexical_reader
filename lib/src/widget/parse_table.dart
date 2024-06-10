@@ -5,6 +5,7 @@ class ParseTable extends StatelessWidget {
     super.key,
     required this.child,
   });
+
   final Map<String, dynamic> child;
 
   List<TableRow> _buildTableRows(List<dynamic> childrenData) {
@@ -12,6 +13,7 @@ class ParseTable extends StatelessWidget {
         .where((row) => row['type'] == 'tablerow')
         .map<TableRow>((tableRow) => _buildTableRow(tableRow))
         .toList();
+
     return temp;
   }
 
@@ -20,10 +22,6 @@ class ParseTable extends StatelessWidget {
         .where((cell) => cell['type'] == 'tablecell')
         .map<Widget>((cell) => _BuildTableCell(cell))
         .toList();
-
-    if (rowCells.isEmpty) {
-      rowCells.add(const SizedBox());
-    }
 
     return TableRow(
       children: rowCells,
@@ -34,11 +32,24 @@ class ParseTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final tablePadding = _PropsInheritedWidget.of(context)?.tablePadding ??
         const EdgeInsets.all(2.0);
+    final rows = _buildTableRows(child['children']);
+    final maxCells =
+        rows.map((row) => row.children.length).reduce((a, b) => a > b ? a : b);
+
+    // Ensure all rows have the same number of cells
+    final normalizedRows = rows.map((row) {
+      final cells = row.children;
+      if (cells.length < maxCells) {
+        final diff = maxCells - cells.length;
+        cells.addAll(List.generate(diff, (_) => const SizedBox()));
+      }
+      return TableRow(children: cells);
+    }).toList();
 
     return Padding(
       padding: tablePadding,
       child: Table(
-        children: _buildTableRows(child['children']),
+        children: normalizedRows,
         border: TableBorder.all(color: Colors.black54),
       ),
     );
@@ -63,4 +74,3 @@ class _BuildTableCell extends StatelessWidget {
     );
   }
 }
-      // .map<TableRow>((tableRow) => _buildTableRow(tableRow))
