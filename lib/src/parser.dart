@@ -10,15 +10,15 @@ import 'package:flutter_math_fork/flutter_math.dart';
 import 'model/image_options.dart';
 import 'widget/expandable_list.dart';
 
-part 'widget/parse_text.dart';
+part 'props.dart';
+part 'widget/parse_children.dart';
 part 'widget/parse_equation.dart';
 part 'widget/parse_image.dart';
-part 'widget/parse_paragraph.dart';
-part 'widget/parse_table.dart';
 part 'widget/parse_numbered_list.dart';
 part 'widget/parse_numbered_list_item.dart';
-part 'widget/parse_children.dart';
-part 'props.dart';
+part 'widget/parse_paragraph.dart';
+part 'widget/parse_table.dart';
+part 'widget/parse_text.dart';
 
 /// The primary widget for parsing and rendering complex JSON structures.
 ///
@@ -46,6 +46,7 @@ class LexicalParser extends StatefulWidget {
     this.imageOptions = const ImageOptions(),
     this.mathEquationPadding,
     this.expanded,
+    this.listPadding,
   });
 
   /// Direct input of the JSON structure.
@@ -69,6 +70,8 @@ class LexicalParser extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final ImageOptions imageOptions;
   final EdgeInsetsGeometry? mathEquationPadding;
+  final EdgeInsetsGeometry? listPadding;
+
   final bool? expanded;
 
   @override
@@ -126,6 +129,7 @@ class _LexicalParserState extends State<LexicalParser> {
             },
           )
         : ListView(
+            padding: widget.listPadding,
             physics: widget.scrollPhysics,
             controller: widget.scrollController,
             shrinkWrap: widget.shrinkWrap,
