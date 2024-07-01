@@ -12,12 +12,15 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
     image = Image.memory(
       bytes,
       fit: BoxFit.fitWidth,
-      errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(),
+      errorBuilder: (context, error, stackTrace) => _imageErrorBuilder(error),
     );
+  } else if (imageSource is String) {
+    // image = const Text('image is string');
+    image = const SizedBox.shrink();
   } else {
     image = CachedNetworkImage(
       imageUrl: child['src'][0],
-      errorWidget: (context, error, stackTrace) => _imageErrorBuilder(),
+      errorWidget: (context, error, stackTrace) => _imageErrorBuilder(error),
       fit: BoxFit.fitWidth,
       placeholder: (context, url) => const CircularProgressIndicator(),
     );
@@ -69,11 +72,11 @@ void _fullScreenImage(BuildContext context, Widget child) {
   );
 }
 
-Row _imageErrorBuilder() {
-  return const Row(
+Row _imageErrorBuilder(Object error) {
+  return Row(
     children: [
-      Text('Failed to load BASE64 image'),
-      Icon(Icons.error),
+      Text('Failed to load $error'),
+      const Icon(Icons.error),
     ],
   );
 }

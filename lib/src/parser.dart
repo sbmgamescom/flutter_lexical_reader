@@ -97,6 +97,7 @@ class _LexicalParserState extends State<LexicalParser> {
 
   @override
   Widget build(BuildContext context) {
+    log('Lexical: ${jsonEncode(_data)}');
     return _PropsInheritedWidget(
       paragraphStyle: widget.paragraphStyle,
       h1Style: widget.h1Style,
