@@ -8,7 +8,6 @@ import 'package:flutter_lexical_reader/src/model/math_equation_options.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
 import 'model/image_options.dart';
-import 'widget/expandable_list.dart';
 
 part 'props.dart';
 part 'widget/parse_children.dart';
@@ -87,11 +86,13 @@ class _LexicalParserState extends State<LexicalParser> {
   @override
   void initState() {
     super.initState();
-    if (widget.sourceString != null) {
-      _data = jsonDecode(widget.sourceString!);
-    } else {
-      _data = widget.sourceMap;
-    }
+    try {
+      if (widget.sourceString != null) {
+        _data = jsonDecode(widget.sourceString!);
+      } else {
+        _data = widget.sourceMap;
+      }
+    } catch (e) {}
     log(_data.toString());
   }
 
@@ -113,11 +114,26 @@ class _LexicalParserState extends State<LexicalParser> {
   }
 
   Widget _buildList() {
-    if (widget.expanded == true) {
-      return ExpandableListView(
-        children: parseJsonChildrenWidget(parsedChildren),
+    if (_data?['root'] == null) {
+      return Container(
+        padding: widget.paragraphPadding,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.sourceString ?? 'Invalid JSON structure',
+                style: widget.paragraphStyle,
+              ),
+            ),
+          ],
+        ),
       );
     }
+    // if (widget.expanded == true) {
+    //   return ExpandableListView(
+    //     children: parseJsonChildrenWidget(parsedChildren),
+    //   );
+    // }
 
     return widget.lazyLoad == true
         ? ListView.builder(
