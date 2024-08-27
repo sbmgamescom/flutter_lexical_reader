@@ -126,30 +126,24 @@ class _LexicalCardState extends State<LexicalCard> {
       {int? maxLines}) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final List<InlineSpan> textOnlySpans =
-            spans.where((span) => span is! WidgetSpan).toList();
-
         final textPainter = TextPainter(
-          text: TextSpan(children: textOnlySpans),
           textDirection: TextDirection.ltr,
           maxLines: maxLines,
         );
 
-        textPainter.layout(maxWidth: constraints.maxWidth);
         List<InlineSpan> visibleSpans = [];
         int currentLine = 0;
 
-        for (var span in textOnlySpans) {
-          textPainter.text = TextSpan(children: visibleSpans + [span]);
+        for (var span in spans) {
+          visibleSpans.add(span);
+          textPainter.text = TextSpan(children: visibleSpans);
           textPainter.layout(maxWidth: constraints.maxWidth);
 
           final linesCount = textPainter.computeLineMetrics().length;
 
           if (maxLines != null && linesCount > maxLines) {
+            visibleSpans.removeLast();
             break;
-          } else {
-            visibleSpans.add(span);
-            currentLine = linesCount;
           }
         }
 
