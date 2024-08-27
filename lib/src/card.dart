@@ -1,24 +1,4 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_lexical_reader/src/model/math_equation_options.dart';
-import 'package:flutter_math_fork/flutter_math.dart';
-
-import 'model/image_options.dart';
-
-part 'card.dart';
-part 'props.dart';
-part 'widget/parse_children.dart';
-part 'widget/parse_equation.dart';
-part 'widget/parse_image.dart';
-part 'widget/parse_numbered_list.dart';
-part 'widget/parse_numbered_list_item.dart';
-part 'widget/parse_paragraph.dart';
-part 'widget/parse_table.dart';
-part 'widget/parse_text.dart';
+part of 'parser.dart';
 
 /// The primary widget for parsing and rendering complex JSON structures.
 ///
@@ -26,8 +6,8 @@ part 'widget/parse_text.dart';
 /// or a raw JSON string through `sourceString`. It processes this input to generate a visual representation.
 ///
 /// Other stylistic and structural properties can also be customized.
-class LexicalParser extends StatefulWidget {
-  const LexicalParser({
+class LexicalCard extends StatefulWidget {
+  const LexicalCard({
     super.key,
     this.sourceMap,
     this.sourceString,
@@ -75,11 +55,12 @@ class LexicalParser extends StatefulWidget {
   final bool? expanded;
 
   @override
-  State<LexicalParser> createState() => _LexicalParserState();
+  State<LexicalCard> createState() => _LexicalCardState();
 }
 
-class _LexicalParserState extends State<LexicalParser> {
+class _LexicalCardState extends State<LexicalCard> {
   Map<String, dynamic>? _data;
+  bool _isExpanded = false;
 
   List<dynamic> get parsedChildren =>
       _data?['root']['children'] as List<dynamic>? ?? [];
@@ -99,7 +80,6 @@ class _LexicalParserState extends State<LexicalParser> {
 
   @override
   Widget build(BuildContext context) {
-    log('Lexical: ${jsonEncode(_data)}');
     return _PropsInheritedWidget(
       paragraphStyle: widget.paragraphStyle,
       h1Style: widget.h1Style,
@@ -110,48 +90,76 @@ class _LexicalParserState extends State<LexicalParser> {
       tableCellPadding: widget.tableCellPadding,
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
-      child: _buildList(),
+      child: Builder(builder: (context) {
+        List<InlineSpan> allChildrenWidgets = [];
+
+        // Collect all InlineSpan from each child
+        for (var child in parsedChildren) {
+          allChildrenWidgets
+              .addAll(parseJsonChild(child['children'] ?? [], context));
+        }
+
+        return Padding(
+          padding: widget.paragraphPadding ?? const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildLimitedRichText(context, allChildrenWidgets,
+                  maxLines: _isExpanded ? null : 4),
+              if (!_isExpanded)
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _isExpanded = true;
+                    });
+                  },
+                  child: const Text('See More'),
+                ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
-  Widget _buildList() {
-    if (_data?['root'] == null) {
-      return Container(
-        padding: widget.paragraphPadding,
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.sourceString ?? 'Invalid JSON structure',
-                style: widget.paragraphStyle,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    // if (widget.expanded == true) {
-    //   return ExpandableListView(
-    //     children: parseJsonChildrenWidget(parsedChildren),
-    //   );
-    // }
+  Widget _buildLimitedRichText(BuildContext context, List<InlineSpan> spans,
+      {int? maxLines}) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final List<InlineSpan> textOnlySpans =
+            spans.where((span) => span is! WidgetSpan).toList();
 
-    return widget.lazyLoad == true
-        ? ListView.builder(
-            controller: widget.scrollController,
-            physics: widget.scrollPhysics,
-            shrinkWrap: widget.shrinkWrap,
-            itemCount: parsedChildren.length,
-            itemBuilder: (context, index) {
-              return parseJsonChildrenWidget([parsedChildren[index]])[0];
-            },
-          )
-        : ListView(
-            padding: widget.listPadding,
-            physics: widget.scrollPhysics,
-            controller: widget.scrollController,
-            shrinkWrap: widget.shrinkWrap,
-            children: parseJsonChildrenWidget(parsedChildren),
-          );
+        final textPainter = TextPainter(
+          text: TextSpan(children: textOnlySpans),
+          textDirection: TextDirection.ltr,
+          maxLines: maxLines,
+        );
+
+        textPainter.layout(maxWidth: constraints.maxWidth);
+        List<InlineSpan> visibleSpans = [];
+        int currentLine = 0;
+
+        for (var span in textOnlySpans) {
+          textPainter.text = TextSpan(children: visibleSpans + [span]);
+          textPainter.layout(maxWidth: constraints.maxWidth);
+
+          final linesCount = textPainter.computeLineMetrics().length;
+
+          if (maxLines != null && linesCount > maxLines) {
+            break;
+          } else {
+            visibleSpans.add(span);
+            currentLine = linesCount;
+          }
+        }
+
+        return RichText(
+          text: TextSpan(children: visibleSpans),
+          maxLines: maxLines,
+          overflow:
+              maxLines != null ? TextOverflow.ellipsis : TextOverflow.visible,
+        );
+      },
+    );
   }
 }
