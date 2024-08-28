@@ -109,15 +109,14 @@ class _LexicalCardState extends State<LexicalCard> {
                 child: _buildLimitedRichText(context, allChildrenWidgets,
                     maxLines: _isExpanded ? null : 4),
               ),
-              if (!_isExpanded)
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded = true;
-                    });
-                  },
-                  child: const Text('See More'),
-                ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
+                child: Text(_isExpanded ? 'Hide' : 'See More'),
+              ),
             ],
           ),
         );
@@ -138,7 +137,6 @@ class _LexicalCardState extends State<LexicalCard> {
         );
 
         List<InlineSpan> visibleSpans = [];
-        int currentLine = 0;
 
         for (var span in spans) {
           visibleSpans.add(span);
