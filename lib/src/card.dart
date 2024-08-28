@@ -104,8 +104,11 @@ class _LexicalCardState extends State<LexicalCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLimitedRichText(context, allChildrenWidgets,
-                  maxLines: _isExpanded ? null : 4),
+              SizedBox(
+                width: double.infinity,
+                child: _buildLimitedRichText(context, allChildrenWidgets,
+                    maxLines: _isExpanded ? null : 4),
+              ),
               if (!_isExpanded)
                 TextButton(
                   onPressed: () {
@@ -122,8 +125,11 @@ class _LexicalCardState extends State<LexicalCard> {
     );
   }
 
-  Widget _buildLimitedRichText(BuildContext context, List<InlineSpan> spans,
-      {int? maxLines}) {
+  Widget _buildLimitedRichText(
+    BuildContext context,
+    List<InlineSpan> spans, {
+    int? maxLines,
+  }) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final textPainter = TextPainter(
@@ -148,6 +154,7 @@ class _LexicalCardState extends State<LexicalCard> {
         }
 
         return RichText(
+          textAlign: TextAlign.justify,
           text: TextSpan(children: visibleSpans),
           maxLines: maxLines,
           overflow:
