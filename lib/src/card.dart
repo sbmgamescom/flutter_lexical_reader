@@ -25,8 +25,8 @@ class LexicalCard extends StatefulWidget {
     this.scrollPhysics,
     this.imageOptions = const ImageOptions(),
     this.mathEquationPadding,
-    this.expanded,
     this.listPadding,
+    required this.cardStyle,
   });
 
   /// Direct input of the JSON structure.
@@ -52,7 +52,7 @@ class LexicalCard extends StatefulWidget {
   final EdgeInsetsGeometry? mathEquationPadding;
   final EdgeInsetsGeometry? listPadding;
 
-  final bool? expanded;
+  final LexicalCardStyle cardStyle;
 
   @override
   State<LexicalCard> createState() => _LexicalCardState();
@@ -110,12 +110,18 @@ class _LexicalCardState extends State<LexicalCard> {
                     maxLines: _isExpanded ? null : 4),
               ),
               TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  foregroundColor: const Color(0xff55BBEB),
+                ),
                 onPressed: () {
                   setState(() {
                     _isExpanded = !_isExpanded;
                   });
                 },
-                child: Text(_isExpanded ? 'Hide' : 'See More'),
+                child: Text(_isExpanded
+                    ? widget.cardStyle.hideTitle
+                    : widget.cardStyle.seeMoreTitle),
               ),
             ],
           ),
@@ -161,4 +167,16 @@ class _LexicalCardState extends State<LexicalCard> {
       },
     );
   }
+}
+
+class LexicalCardStyle {
+  final TextAlign textAlign;
+  final String seeMoreTitle;
+  final String hideTitle;
+
+  LexicalCardStyle({
+    this.textAlign = TextAlign.justify,
+    required this.seeMoreTitle,
+    required this.hideTitle,
+  });
 }
