@@ -94,10 +94,8 @@ class _LexicalCardState extends State<LexicalCard> {
         List<InlineSpan> allChildrenWidgets = [];
 
         // Collect all InlineSpan from each child
-        for (var child in parsedChildren) {
-          allChildrenWidgets
-              .addAll(parseJsonChild(child['children'] ?? [], context));
-        }
+        allChildrenWidgets =
+            getParsedChildrenWithSeparators(parsedChildren, context);
 
         return Padding(
           padding: widget.paragraphPadding ?? const EdgeInsets.all(8.0),
@@ -166,6 +164,22 @@ class _LexicalCardState extends State<LexicalCard> {
         );
       },
     );
+  }
+
+  List<InlineSpan> getParsedChildrenWithSeparators(
+      List<dynamic> children, BuildContext context) {
+    List<InlineSpan> spans = [];
+
+    for (int i = 0; i < children.length; i++) {
+      spans.addAll(parseJsonChild(children[i]['children'] ?? [], context));
+
+      // Добавляем перенос строки, кроме последней ноды
+      if (i < children.length - 1) {
+        spans.add(const TextSpan(text: '\n')); // Перенос строки
+      }
+    }
+
+    return spans;
   }
 }
 
