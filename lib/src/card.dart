@@ -109,7 +109,10 @@ class _LexicalCardState extends State<LexicalCard> {
               ),
               TextButton(
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 4.0, horizontal: 0.0),
+                  minimumSize: const Size(0, 0),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   foregroundColor: const Color(0xff55BBEB),
                 ),
                 onPressed: () {
