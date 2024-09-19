@@ -12,6 +12,8 @@ class _PropsInheritedWidget extends InheritedWidget {
   final MathEquationOptions mathEquationOptions;
   final ImageOptions imageOptions;
 
+  final ParagraphStyle? paragraphDataStyle;
+
   const _PropsInheritedWidget({
     Key? key,
     this.paragraphStyle,
@@ -24,6 +26,7 @@ class _PropsInheritedWidget extends InheritedWidget {
     this.h1Style,
     this.h2Style,
     required this.imageOptions,
+    this.paragraphDataStyle,
   }) : super(key: key, child: child);
 
   static _PropsInheritedWidget? maybeOf(BuildContext context) {

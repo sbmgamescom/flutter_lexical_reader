@@ -1,5 +1,12 @@
 part of '../parser.dart';
 
+class ParagraphStyle {
+  final TextAlign textAlign;
+  final double? heightText;
+
+  ParagraphStyle({required this.textAlign, this.heightText});
+}
+
 class _ParseParagraph extends StatelessWidget {
   const _ParseParagraph({
     required this.child,
@@ -19,19 +26,27 @@ class _ParseParagraph extends StatelessWidget {
       context,
     );
 
+    final paragraphDataStyle =
+        _PropsInheritedWidget.of(context)?.paragraphDataStyle;
     return Padding(
       padding: paragraphPadding,
       child: RichText(
-        textAlign: _alignmentFromString(child['format']),
+        textAlign: _alignmentFromString(child['format'],
+            textAlign: paragraphDataStyle?.textAlign),
         text: TextSpan(
           children: childrenWidgets,
-          style: textStyle,
+          style: textStyle.copyWith(
+            height: paragraphDataStyle?.heightText,
+          ),
         ),
       ),
     );
   }
 
-  TextAlign _alignmentFromString(String? format) {
+  TextAlign _alignmentFromString(String? format, {TextAlign? textAlign}) {
+    if (textAlign != null) {
+      return textAlign;
+    }
     switch (format) {
       case 'center':
         return TextAlign.center;

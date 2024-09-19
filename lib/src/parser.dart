@@ -47,6 +47,7 @@ class LexicalParser extends StatefulWidget {
     this.mathEquationPadding,
     this.expanded,
     this.listPadding,
+    this.paragraphDataStyle,
   });
 
   /// Direct input of the JSON structure.
@@ -71,6 +72,7 @@ class LexicalParser extends StatefulWidget {
   final ImageOptions imageOptions;
   final EdgeInsetsGeometry? mathEquationPadding;
   final EdgeInsetsGeometry? listPadding;
+  final ParagraphStyle? paragraphDataStyle;
 
   final bool? expanded;
 
@@ -110,6 +112,7 @@ class _LexicalParserState extends State<LexicalParser> {
       tableCellPadding: widget.tableCellPadding,
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
+      paragraphDataStyle: widget.paragraphDataStyle,
       child: _buildList(),
     );
   }
