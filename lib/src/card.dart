@@ -120,9 +120,12 @@ class _LexicalCardState extends State<LexicalCard> {
                     _isExpanded = !_isExpanded;
                   });
                 },
-                child: Text(_isExpanded
-                    ? widget.cardStyle.hideTitle
-                    : widget.cardStyle.seeMoreTitle),
+                child: Text(
+                  _isExpanded
+                      ? widget.cardStyle.hideTitle
+                      : widget.cardStyle.seeMoreTitle,
+                  style: widget.paragraphStyle,
+                ),
               ),
             ],
           ),
@@ -159,8 +162,12 @@ class _LexicalCardState extends State<LexicalCard> {
         }
 
         return RichText(
-          textAlign: TextAlign.justify,
-          text: TextSpan(children: visibleSpans),
+          textAlign: widget.cardStyle.textAlign,
+          text: TextSpan(
+              children: visibleSpans,
+              style: TextStyle(
+                height: widget.cardStyle.height,
+              )),
           maxLines: maxLines,
           overflow:
               maxLines != null ? TextOverflow.ellipsis : TextOverflow.visible,
@@ -190,10 +197,12 @@ class LexicalCardStyle {
   final TextAlign textAlign;
   final String seeMoreTitle;
   final String hideTitle;
+  final double? height;
 
   LexicalCardStyle({
     this.textAlign = TextAlign.justify,
     required this.seeMoreTitle,
     required this.hideTitle,
+    this.height,
   });
 }
