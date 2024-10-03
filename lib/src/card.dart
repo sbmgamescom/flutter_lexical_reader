@@ -74,7 +74,9 @@ class _LexicalCardState extends State<LexicalCard> {
       } else {
         _data = widget.sourceMap;
       }
-    } catch (e) {}
+    } catch (e) {
+      // Обработка ошибки при парсинге, если необходимо
+    }
     log(_data.toString());
   }
 
@@ -91,10 +93,8 @@ class _LexicalCardState extends State<LexicalCard> {
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
       child: Builder(builder: (context) {
-        List<InlineSpan> allChildrenWidgets = [];
-
-        // Collect all InlineSpan from each child
-        allChildrenWidgets =
+        // Собираем все InlineSpan из каждого дочернего элемента
+        List<InlineSpan> allChildrenSpans =
             getParsedChildrenWithSeparators(parsedChildren, context);
 
         return Padding(
@@ -104,8 +104,11 @@ class _LexicalCardState extends State<LexicalCard> {
             children: [
               SizedBox(
                 width: double.infinity,
-                child: _buildLimitedRichText(context, allChildrenWidgets,
-                    maxLines: _isExpanded ? null : 4),
+                child: _buildLimitedRichText(
+                  context,
+                  allChildrenSpans,
+                  maxLines: _isExpanded ? null : 4,
+                ),
               ),
               TextButton(
                 style: TextButton.styleFrom(
@@ -134,48 +137,6 @@ class _LexicalCardState extends State<LexicalCard> {
     );
   }
 
-  Widget _buildLimitedRichText(
-    BuildContext context,
-    List<InlineSpan> spans, {
-    int? maxLines,
-  }) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final textPainter = TextPainter(
-          textDirection: TextDirection.ltr,
-          maxLines: maxLines,
-        );
-
-        List<InlineSpan> visibleSpans = [];
-
-        for (var span in spans) {
-          visibleSpans.add(span);
-          textPainter.text = TextSpan(children: visibleSpans);
-          textPainter.layout(maxWidth: constraints.maxWidth);
-
-          final linesCount = textPainter.computeLineMetrics().length;
-
-          if (maxLines != null && linesCount > maxLines) {
-            visibleSpans.removeLast();
-            break;
-          }
-        }
-
-        return RichText(
-          textAlign: widget.cardStyle.textAlign,
-          text: TextSpan(
-              children: visibleSpans,
-              style: TextStyle(
-                height: widget.cardStyle.height,
-              )),
-          maxLines: maxLines,
-          overflow:
-              maxLines != null ? TextOverflow.ellipsis : TextOverflow.visible,
-        );
-      },
-    );
-  }
-
   List<InlineSpan> getParsedChildrenWithSeparators(
       List<dynamic> children, BuildContext context) {
     List<InlineSpan> spans = [];
@@ -190,6 +151,100 @@ class _LexicalCardState extends State<LexicalCard> {
     }
 
     return spans;
+  }
+
+  void updatePlaceholderDimensions(
+      InlineSpan span,
+      List<PlaceholderDimensions> placeholderDimensions,
+      BoxConstraints constraints,
+      {bool isAdding = true}) {
+    if (span is PlaceholderSpan) {
+      if (isAdding) {
+        placeholderDimensions.add(
+          PlaceholderDimensions(
+            size: _getPlaceholderSpanSize(span, constraints),
+            alignment: span.alignment,
+            baseline: span.baseline,
+            baselineOffset: 1,
+          ),
+        );
+      } else {
+        placeholderDimensions.removeLast();
+      }
+    } else if (span is TextSpan && span.children != null) {
+      for (var child in isAdding ? span.children! : span.children!.reversed) {
+        updatePlaceholderDimensions(child, placeholderDimensions, constraints,
+            isAdding: isAdding);
+      }
+    }
+  }
+
+  Widget _buildLimitedRichText(
+    BuildContext context,
+    List<InlineSpan> spans, {
+    int? maxLines,
+  }) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final textPainter = TextPainter(
+          textDirection: TextDirection.ltr,
+          maxLines: maxLines,
+        );
+
+        List<InlineSpan> visibleSpans = [];
+        List<PlaceholderDimensions> placeholderDimensions = [];
+
+        for (var span in spans) {
+          visibleSpans.add(span);
+
+          // Обновляем PlaceholderDimensions при добавлении спана
+          updatePlaceholderDimensions(span, placeholderDimensions, constraints,
+              isAdding: true);
+
+          textPainter.text = TextSpan(children: visibleSpans);
+          if (placeholderDimensions.isNotEmpty) {
+            textPainter.setPlaceholderDimensions(placeholderDimensions);
+          }
+          textPainter.layout(maxWidth: constraints.maxWidth);
+
+          final linesCount = textPainter.computeLineMetrics().length;
+
+          if (maxLines != null && linesCount > maxLines) {
+            // Удаляем последний спан
+            var removedSpan = visibleSpans.removeLast();
+
+            // Обновляем PlaceholderDimensions при удалении спана
+            updatePlaceholderDimensions(
+                removedSpan, placeholderDimensions, constraints,
+                isAdding: false);
+            break;
+          }
+        }
+
+        return RichText(
+          textAlign: widget.cardStyle.textAlign,
+          text: TextSpan(
+            children: visibleSpans,
+            style: TextStyle(
+              height: widget.cardStyle.height,
+            ),
+          ),
+          maxLines: maxLines,
+          overflow:
+              maxLines != null ? TextOverflow.ellipsis : TextOverflow.visible,
+        );
+      },
+    );
+  }
+
+  Size _getPlaceholderSpanSize(
+      PlaceholderSpan span, BoxConstraints constraints) {
+    if (span is WidgetSpan) {
+      // Возвращаем фиксированный размер для простоты
+      return const Size(16.0, 16.0);
+    }
+    // Обработка других типов PlaceholderSpan при необходимости
+    return Size.zero;
   }
 }
 
