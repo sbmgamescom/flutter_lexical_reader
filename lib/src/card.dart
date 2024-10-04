@@ -27,6 +27,8 @@ class LexicalCard extends StatefulWidget {
     this.mathEquationPadding,
     this.listPadding,
     required this.cardStyle,
+    this.onClose,
+    this.onOpen,
   });
 
   /// Direct input of the JSON structure.
@@ -51,6 +53,8 @@ class LexicalCard extends StatefulWidget {
   final ImageOptions imageOptions;
   final EdgeInsetsGeometry? mathEquationPadding;
   final EdgeInsetsGeometry? listPadding;
+  final VoidCallback? onClose;
+  final VoidCallback? onOpen;
 
   final LexicalCardStyle cardStyle;
 
@@ -121,6 +125,13 @@ class _LexicalCardState extends State<LexicalCard> {
                 onPressed: () {
                   setState(() {
                     _isExpanded = !_isExpanded;
+                  });
+                  Future.delayed(const Duration(milliseconds: 10), () {
+                    if (!_isExpanded) {
+                      widget.onClose?.call();
+                    } else if (_isExpanded) {
+                      widget.onOpen?.call();
+                    }
                   });
                 },
                 child: Text(
