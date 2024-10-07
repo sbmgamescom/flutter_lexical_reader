@@ -22,7 +22,8 @@ WidgetSpan _parseImage(Map<String, dynamic> child, BuildContext context) {
       imageUrl: child['src'][0],
       errorWidget: (context, error, stackTrace) => _imageErrorBuilder(error),
       fit: BoxFit.fitWidth,
-      placeholder: (context, url) => const CircularProgressIndicator(),
+      placeholder: (context, url) =>
+          const Center(child: CupertinoActivityIndicator()),
     );
   }
   return WidgetSpan(
@@ -40,6 +41,7 @@ void _fullScreenImage(BuildContext context, Widget child) {
   Navigator.push(
     context,
     MaterialPageRoute(
+      maintainState: false,
       builder: (context) => Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
