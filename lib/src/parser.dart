@@ -49,6 +49,7 @@ class LexicalParser extends StatefulWidget {
     this.expanded,
     this.listPadding,
     this.paragraphDataStyle,
+    this.useColumn = false,
   });
 
   /// Direct input of the JSON structure.
@@ -76,6 +77,7 @@ class LexicalParser extends StatefulWidget {
   final ParagraphStyle? paragraphDataStyle;
 
   final bool? expanded;
+  final bool useColumn;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -139,6 +141,12 @@ class _LexicalParserState extends State<LexicalParser> {
     //     children: parseJsonChildrenWidget(parsedChildren),
     //   );
     // }
+
+    if (widget.useColumn) {
+      return Column(
+        children: parseJsonChildrenWidget(parsedChildren),
+      );
+    }
 
     return widget.lazyLoad == true
         ? ListView.builder(
