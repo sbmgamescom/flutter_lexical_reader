@@ -81,15 +81,17 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
   }
 
   void _checkOverflow() {
-    if (_scrollController.position.maxScrollExtent > 0) {
-      setState(() {
-        _isOverflowingRight = true;
-      });
-    }
-    if (_scrollController.position.minScrollExtent < 0) {
-      setState(() {
-        _isOverflowingLeft = true;
-      });
+    if (mounted) {
+      if (_scrollController.position.maxScrollExtent > 0) {
+        setState(() {
+          _isOverflowingRight = true;
+        });
+      }
+      if (_scrollController.position.minScrollExtent < 0) {
+        setState(() {
+          _isOverflowingLeft = true;
+        });
+      }
     }
   }
 
@@ -99,26 +101,31 @@ class _OverflowSmokeWidgetState extends State<OverflowSmokeWidget> {
       children: [
         NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification notification) {
-            if (notification.metrics.extentAfter == 0 && _isOverflowingRight) {
-              setState(() {
-                _isOverflowingRight = false;
-              });
-            } else if (notification.metrics.extentAfter > 0 &&
-                !_isOverflowingRight) {
-              setState(() {
-                _isOverflowingRight = true;
-              });
-            }
+            if (mounted) {
+              if (notification.metrics.extentAfter == 0 &&
+                  _isOverflowingRight) {
+                setState(() {
+                  _isOverflowingRight = false;
+                });
+              } else if (notification.metrics.extentAfter > 0 &&
+                  !_isOverflowingRight) {
+                setState(() {
+                  _isOverflowingRight = true;
+                });
+              }
 
-            if (notification.metrics.extentBefore == 0 && _isOverflowingLeft) {
-              setState(() {
-                _isOverflowingLeft = false;
-              });
-            } else if (notification.metrics.extentBefore > 0 &&
-                !_isOverflowingLeft) {
-              setState(() {
-                _isOverflowingLeft = true;
-              });
+              if (notification.metrics.extentBefore == 0 &&
+                  _isOverflowingLeft) {
+                setState(() {
+                  _isOverflowingLeft = false;
+                });
+              } else if (notification.metrics.extentBefore > 0 &&
+                  !_isOverflowingLeft) {
+                setState(() {
+                  _isOverflowingLeft = true;
+                });
+              }
+              return true;
             }
             return true;
           },
