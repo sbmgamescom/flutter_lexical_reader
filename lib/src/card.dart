@@ -31,16 +31,11 @@ class LexicalCard extends StatefulWidget {
     this.onOpen,
   });
 
-  /// Direct input of the JSON structure.
   final Map<String, dynamic>? sourceMap;
-
-  /// Raw JSON string, which will be parsed internally.
   final String? sourceString;
-
   final TextStyle? paragraphStyle;
   final TextStyle? h1Style;
   final TextStyle? h2Style;
-
   final bool? lazyLoad;
   final EdgeInsets? tablePadding;
   final EdgeInsets? tableCellPadding;
@@ -55,7 +50,6 @@ class LexicalCard extends StatefulWidget {
   final EdgeInsetsGeometry? listPadding;
   final VoidCallback? onClose;
   final VoidCallback? onOpen;
-
   final LexicalCardStyle cardStyle;
 
   @override
@@ -79,7 +73,7 @@ class _LexicalCardState extends State<LexicalCard> {
         _data = widget.sourceMap;
       }
     } catch (e) {
-      // Обработка ошибки при парсинге, если необходимо
+      // Error handling if necessary
     }
     log(_data.toString());
   }
@@ -97,7 +91,6 @@ class _LexicalCardState extends State<LexicalCard> {
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
       child: Builder(builder: (context) {
-        // Собираем все InlineSpan из каждого дочернего элемента
         List<InlineSpan> allChildrenSpans =
             getParsedChildrenWithSeparators(parsedChildren, context);
 
@@ -111,36 +104,39 @@ class _LexicalCardState extends State<LexicalCard> {
                 child: _buildLimitedRichText(
                   context,
                   allChildrenSpans,
-                  maxLines: _isExpanded ? null : 4,
+                  maxLines: widget.cardStyle.showHideButton
+                      ? (_isExpanded ? null : 4)
+                      : null,
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 0.0),
-                  minimumSize: const Size(0, 0),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  foregroundColor: const Color(0xff55BBEB),
+              if (widget.cardStyle.showHideButton)
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4.0, horizontal: 0.0),
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    foregroundColor: const Color(0xff55BBEB),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isExpanded = !_isExpanded;
+                    });
+                    Future.delayed(const Duration(milliseconds: 10), () {
+                      if (!_isExpanded) {
+                        widget.onClose?.call();
+                      } else if (_isExpanded) {
+                        widget.onOpen?.call();
+                      }
+                    });
+                  },
+                  child: Text(
+                    _isExpanded
+                        ? widget.cardStyle.hideTitle
+                        : widget.cardStyle.seeMoreTitle,
+                    style: widget.paragraphStyle,
+                  ),
                 ),
-                onPressed: () {
-                  setState(() {
-                    _isExpanded = !_isExpanded;
-                  });
-                  Future.delayed(const Duration(milliseconds: 10), () {
-                    if (!_isExpanded) {
-                      widget.onClose?.call();
-                    } else if (_isExpanded) {
-                      widget.onOpen?.call();
-                    }
-                  });
-                },
-                child: Text(
-                  _isExpanded
-                      ? widget.cardStyle.hideTitle
-                      : widget.cardStyle.seeMoreTitle,
-                  style: widget.paragraphStyle,
-                ),
-              ),
             ],
           ),
         );
@@ -151,16 +147,12 @@ class _LexicalCardState extends State<LexicalCard> {
   List<InlineSpan> getParsedChildrenWithSeparators(
       List<dynamic> children, BuildContext context) {
     List<InlineSpan> spans = [];
-
     for (int i = 0; i < children.length; i++) {
       spans.addAll(parseJsonChild(children[i]['children'] ?? [], context));
-
-      // Добавляем перенос строки, кроме последней ноды
       if (i < children.length - 1) {
-        spans.add(const TextSpan(text: '\n')); // Перенос строки
+        spans.add(const TextSpan(text: '\n'));
       }
     }
-
     return spans;
   }
 
@@ -208,7 +200,6 @@ class _LexicalCardState extends State<LexicalCard> {
         for (var span in spans) {
           visibleSpans.add(span);
 
-          // Обновляем PlaceholderDimensions при добавлении спана
           updatePlaceholderDimensions(span, placeholderDimensions, constraints,
               isAdding: true);
 
@@ -221,10 +212,8 @@ class _LexicalCardState extends State<LexicalCard> {
           final linesCount = textPainter.computeLineMetrics().length;
 
           if (maxLines != null && linesCount > maxLines) {
-            // Удаляем последний спан
             var removedSpan = visibleSpans.removeLast();
 
-            // Обновляем PlaceholderDimensions при удалении спана
             updatePlaceholderDimensions(
                 removedSpan, placeholderDimensions, constraints,
                 isAdding: false);
@@ -251,10 +240,8 @@ class _LexicalCardState extends State<LexicalCard> {
   Size _getPlaceholderSpanSize(
       PlaceholderSpan span, BoxConstraints constraints) {
     if (span is WidgetSpan) {
-      // Возвращаем фиксированный размер для простоты
       return const Size(16.0, 16.0);
     }
-    // Обработка других типов PlaceholderSpan при необходимости
     return Size.zero;
   }
 }
@@ -264,11 +251,13 @@ class LexicalCardStyle {
   final String seeMoreTitle;
   final String hideTitle;
   final double? height;
+  final bool showHideButton; // New parameter
 
   LexicalCardStyle({
     this.textAlign = TextAlign.justify,
     required this.seeMoreTitle,
     required this.hideTitle,
     this.height,
+    this.showHideButton = true, // Default value set to true
   });
 }
