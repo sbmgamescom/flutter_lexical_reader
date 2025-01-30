@@ -33,8 +33,11 @@ List<InlineSpan> parseJsonChild(List<dynamic> children, BuildContext context) {
   for (var child in children) {
     switch (child['type']) {
       case 'text':
-        widgets
-            .add(_parseText(child, props.paragraphStyle ?? const TextStyle()));
+        widgets.add(_parseText(
+          child,
+          props.paragraphStyle ?? const TextStyle(),
+          props.useMyTextStyle,
+        ));
         break;
       case 'image':
         widgets.add(_parseImage(child, context));

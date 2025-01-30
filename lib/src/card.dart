@@ -29,6 +29,7 @@ class LexicalCard extends StatefulWidget {
     required this.cardStyle,
     this.onClose,
     this.onOpen,
+    this.useMyTextStyle = false,
   });
 
   final Map<String, dynamic>? sourceMap;
@@ -51,7 +52,7 @@ class LexicalCard extends StatefulWidget {
   final VoidCallback? onClose;
   final VoidCallback? onOpen;
   final LexicalCardStyle cardStyle;
-
+  final bool useMyTextStyle;
   @override
   State<LexicalCard> createState() => _LexicalCardState();
 }
@@ -90,6 +91,7 @@ class _LexicalCardState extends State<LexicalCard> {
       tableCellPadding: widget.tableCellPadding,
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
+      useMyTextStyle: widget.useMyTextStyle,
       child: Builder(builder: (context) {
         List<InlineSpan> allChildrenSpans =
             getParsedChildrenWithSeparators(parsedChildren, context);

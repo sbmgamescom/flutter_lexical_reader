@@ -50,6 +50,7 @@ class LexicalParser extends StatefulWidget {
     this.listPadding,
     this.paragraphDataStyle,
     this.useColumn = false,
+    this.useMyTextStyle = false,
   });
 
   /// Direct input of the JSON structure.
@@ -78,6 +79,7 @@ class LexicalParser extends StatefulWidget {
 
   final bool? expanded;
   final bool useColumn;
+  final bool useMyTextStyle;
 
   @override
   State<LexicalParser> createState() => _LexicalParserState();
@@ -116,6 +118,7 @@ class _LexicalParserState extends State<LexicalParser> {
       mathEquationOptions: widget.mathEquationOptions,
       imageOptions: widget.imageOptions,
       paragraphDataStyle: widget.paragraphDataStyle,
+      useMyTextStyle: widget.useMyTextStyle,
       child: _buildList(),
     );
   }

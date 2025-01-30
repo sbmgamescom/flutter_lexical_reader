@@ -1,7 +1,8 @@
 part of '../parser.dart';
 
-InlineSpan _parseText(Map<String, dynamic> child, TextStyle textStyle) {
-  final baseStyle = _textStyle(child['format'], textStyle);
+InlineSpan _parseText(
+    Map<String, dynamic> child, TextStyle textStyle, bool useMyStyle) {
+  final baseStyle = _textStyle(child['format'], textStyle, useMyStyle);
   final fontSize = baseStyle.fontSize ?? 12;
 
   InlineSpan mainSpan;
@@ -60,7 +61,7 @@ bool _isSubscript(int? format) {
   return format != null && (format & 32) != 0;
 }
 
-TextStyle _textStyle(int? format, TextStyle style) {
+TextStyle _textStyle(int? format, TextStyle style, bool useMyStyle) {
   final textStyle = style;
   FontWeight fontWeight = FontWeight.normal;
   FontStyle fontStyle = FontStyle.normal;
@@ -76,9 +77,9 @@ TextStyle _textStyle(int? format, TextStyle style) {
   if (format & 8 != 0) decoration = TextDecoration.underline;
 
   return textStyle.copyWith(
-    color: Colors.black,
-    fontWeight: fontWeight,
-    fontStyle: fontStyle,
+    color: style.color ?? Colors.black,
+    fontWeight: useMyStyle ? null : fontWeight,
+    fontStyle: useMyStyle ? null : fontStyle,
     decoration: isStrikethrough ? TextDecoration.lineThrough : decoration,
   );
 }
